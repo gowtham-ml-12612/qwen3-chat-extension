@@ -716,7 +716,7 @@ let ox = 0;
 let oy = 0;
 
 dragHandle.addEventListener("mousedown", (e) => {
-  if ((e.target as HTMLElement).closest("button, .modes")) return;
+  if ((e.target as HTMLElement).closest("button, .modes, select, label, .ctx-row")) return;
   dragging = true;
   const r = host.getBoundingClientRect();
   ox = e.clientX - r.left;
