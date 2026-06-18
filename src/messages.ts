@@ -54,6 +54,23 @@ export type EngineEvent =
       fellBack: boolean;
     }
   | { kind: "loaderror"; message: string }
+  | {
+      /**
+       * Context-window usage report, sent after every turn + compaction.
+       * Drives the circular progress ring in the panel.
+       *   ratio  — tokens used / history budget (0→1, can briefly exceed 1
+       *            before compaction runs).
+       *   used   — token count currently occupied (summary + turns).
+       *   budget — total token room for conversation history.
+       *   phase  — "ok" when under watermark, "compacting" while the
+       *            summariser is running, "compacted" right after.
+       */
+      kind: "context";
+      ratio: number;
+      used: number;
+      budget: number;
+      phase: "ok" | "compacting" | "compacted";
+    }
   | { kind: "status"; reqId: string; text: string }
   | { kind: "delta"; reqId: string; text: string }
   | { kind: "done"; reqId: string; text: string }

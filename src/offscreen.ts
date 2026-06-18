@@ -402,6 +402,34 @@ async function summarize(
 // two compactions from overlapping if jobs ever interleave.
 let compacting = false;
 
+// Compute the history budget (tokens available for summary + turns) and emit a
+// context-usage event so the panel can update its progress ring.
+function historyBudgetFor(
+  cfg: ModeConfig,
+  systemPrompt: string,
+  hasImage: boolean,
+): number {
+  const reserve =
+    estimateTokens(systemPrompt) + (hasImage ? MODEL.imageMaxTokens : 0) + cfg.maxTokens + 256;
+  return Math.max(512, ctxSize - reserve);
+}
+
+function emitContextUsage(
+  clientId: number,
+  session: Session,
+  budget: number,
+  phase: "ok" | "compacting" | "compacted",
+): void {
+  const used = sessionTokens(session);
+  relay(clientId, {
+    kind: "context",
+    ratio: budget > 0 ? used / budget : 0,
+    used,
+    budget,
+    phase,
+  });
+}
+
 // Compact the session when it nears the context budget by summarizing its oldest
 // turns. `historyBudget` is the room left for the conversation (summary + turns)
 // after reserving the system prompt, the image (vision turns), the model's reply,
@@ -417,15 +445,14 @@ async function maybeCompact(
 ): Promise<void> {
   if (compacting) return;
 
-  const reserve =
-    estimateTokens(systemPrompt) + (job.image ? MODEL.imageMaxTokens : 0) + cfg.maxTokens + 256;
-  const historyBudget = Math.max(512, ctxSize - reserve);
-  if (sessionTokens(session) <= historyBudget * COMPACTION_WATERMARK) return;
+  const budget = historyBudgetFor(cfg, systemPrompt, !!job.image);
+  if (sessionTokens(session) <= budget * COMPACTION_WATERMARK) return;
 
-  const plan = planCompaction(session, Math.floor(historyBudget * COMPACTION_TARGET));
+  const plan = planCompaction(session, Math.floor(budget * COMPACTION_TARGET));
   if (plan.fold.length === 0) return;
 
   compacting = true;
+  emitContextUsage(job.clientId, session, budget, "compacting");
   relay(job.clientId, {
     kind: "status",
     reqId: job.reqId,
@@ -434,6 +461,7 @@ async function maybeCompact(
   try {
     const summary = await summarize(session.summary, plan.fold, signal);
     if (summary) applyCompaction(session, summary, plan.keep);
+    emitContextUsage(job.clientId, session, budget, "compacted");
   } finally {
     compacting = false;
   }
@@ -484,6 +512,10 @@ async function runChat(job: ChatJob): Promise<void> {
     // Record what the user actually saw (partial answers included) so the next
     // turn has correct context.
     if (result.text) appendTurn(session, "assistant", result.text);
+
+    // Report updated context usage after the turn lands.
+    const budget = historyBudgetFor(cfg, systemPrompt, !!job.image);
+    emitContextUsage(clientId, session, budget, "ok");
 
     const text = result.text || (result.aborted ? "(stopped)" : "(no answer)");
     relay(clientId, { kind: "done", reqId, text });

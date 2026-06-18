@@ -57,7 +57,16 @@ shadow.innerHTML = `
       <label class="ctx-label" for="ctx-select" title="Context window — how much conversation the model can hold. Changing it reloads the model.">Context</label>
       <select id="ctx-select" class="ctx-select" title="Context window size — larger holds more but uses more memory; changing it reloads the model" disabled></select>
     </div>
-    <div id="status">Loading model…</div>
+    <div class="status-row">
+      <div id="status">Loading model…</div>
+      <div class="ctx-ring-wrap" id="ctx-ring-wrap" title="Context usage">
+        <svg class="ctx-ring" viewBox="0 0 36 36">
+          <circle class="ctx-ring-bg" cx="18" cy="18" r="15.5" />
+          <circle class="ctx-ring-fg" id="ctx-ring-fg" cx="18" cy="18" r="15.5" />
+        </svg>
+        <span class="ctx-ring-pct" id="ctx-ring-pct"></span>
+      </div>
+    </div>
     <progress id="load-progress" max="1" value="0"></progress>
   </header>
 
@@ -102,6 +111,9 @@ const dragHandle     = q("drag-handle");
 const modeSwitchEl   = q("mode-switch");
 const ctxSelectEl    = q<HTMLSelectElement>("ctx-select");
 const welcomeEl      = q("welcome");
+const ctxRingWrap    = q("ctx-ring-wrap");
+const ctxRingFg      = shadow.getElementById("ctx-ring-fg") as unknown as SVGCircleElement;
+const ctxRingPct     = q("ctx-ring-pct");
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
@@ -151,6 +163,68 @@ function setReady(ready: boolean) {
 
 function setIdleStatus() {
   statusEl.textContent = `${MODEL_LABEL} · ${MODES[mode].label} · ${(activeCtx / 1024).toFixed(0)}K`;
+}
+
+// ── Context-window usage ring ─────────────────────────────────────────────────
+// A small circular progress indicator showing how full the context window is.
+// Grows from 0 → watermark (green → yellow → red). Pulses while compacting.
+
+const RING_CIRCUMFERENCE = 2 * Math.PI * 15.5; // r=15.5 matches the SVG
+ctxRingFg.style.strokeDasharray = `${RING_CIRCUMFERENCE}`;
+ctxRingFg.style.strokeDashoffset = `${RING_CIRCUMFERENCE}`;
+
+function updateContextRing(
+  ratio: number,
+  used: number,
+  budget: number,
+  phase: "ok" | "compacting" | "compacted",
+) {
+  // Clamp for display
+  const clamped = Math.max(0, Math.min(ratio, 1));
+  const pct = Math.round(clamped * 100);
+
+  // Stroke offset: full circle = hidden, 0 = full ring
+  const offset = RING_CIRCUMFERENCE * (1 - clamped);
+  ctxRingFg.style.strokeDashoffset = `${offset}`;
+
+  // Color: green → yellow → orange → red
+  let color: string;
+  if (clamped < 0.5) {
+    color = "var(--green)";
+  } else if (clamped < 0.7) {
+    color = "var(--ctx-yellow)";
+  } else if (clamped < 0.85) {
+    color = "var(--ctx-orange)";
+  } else {
+    color = "var(--red)";
+  }
+  ctxRingFg.style.stroke = color;
+
+  // Percentage label
+  ctxRingPct.textContent = `${pct}`;
+
+  // Tooltip
+  ctxRingWrap.title = `Context: ${used.toLocaleString()} / ${budget.toLocaleString()} tokens (${pct}%)`;
+
+  // Pulse animation while compacting
+  ctxRingWrap.classList.toggle("compacting", phase === "compacting");
+
+  // Brief flash on compacted
+  if (phase === "compacted") {
+    ctxRingWrap.classList.add("compacted");
+    setTimeout(() => ctxRingWrap.classList.remove("compacted"), 1500);
+  }
+
+  // Show the ring once we have data (hidden on fresh/empty chats)
+  ctxRingWrap.classList.add("visible");
+}
+
+function resetContextRing() {
+  ctxRingFg.style.strokeDashoffset = `${RING_CIRCUMFERENCE}`;
+  ctxRingFg.style.stroke = "var(--green)";
+  ctxRingPct.textContent = "";
+  ctxRingWrap.title = "Context usage";
+  ctxRingWrap.classList.remove("visible", "compacting", "compacted");
 }
 
 // ── Effort mode (Flash / Focus / Forge) ───────────────────────────────────────
@@ -330,6 +404,7 @@ function resetChat() {
   messagesEl.appendChild(welcomeEl);
   welcomeEl.hidden = false;
   copyBtn.disabled = true;
+  resetContextRing();
 }
 
 // ── Engine client (port to the service worker → offscreen wllama) ─────────────
@@ -374,6 +449,9 @@ function onEngineEvent(ev: EngineEvent) {
       ctxSelectEl.disabled = false;
       reflectCtx(activeCtx);
       statusEl.textContent = `Error: ${ev.message}`;
+      break;
+    case "context":
+      updateContextRing(ev.ratio, ev.used, ev.budget, ev.phase);
       break;
     case "status":
       pending.get(ev.reqId)?.onStatus(ev.text);

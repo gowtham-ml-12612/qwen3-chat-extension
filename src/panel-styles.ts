@@ -11,6 +11,7 @@ export const PANEL_CSS = /* css */ `
     --forge:#f0a050; --forge-d:rgba(240,160,80,0.12);
     --red:#f87171; --red-d:rgba(248,113,113,0.12);
     --green:#4ade80; --green-d:rgba(74,222,128,0.12);
+    --ctx-yellow:#facc15; --ctx-orange:#fb923c;
     --r-sm:8px; --r-md:12px; --r-lg:16px;
     --font:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     --ease:cubic-bezier(.4,0,.2,1);
@@ -148,7 +149,73 @@ export const PANEL_CSS = /* css */ `
   #close-btn { color: var(--red); }
   #close-btn:hover { background: var(--red-d); }
 
-  #status { font-size: 11px; color: var(--text-2); line-height: 1.3; }
+  /* ── Status row + context ring ────────────────────────────────────────── */
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  #status { font-size: 11px; color: var(--text-2); line-height: 1.3; flex: 1; }
+
+  .ctx-ring-wrap {
+    position: relative;
+    width: 28px; height: 28px;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+    pointer-events: none;
+  }
+  .ctx-ring-wrap.visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+    cursor: default;
+  }
+
+  .ctx-ring {
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+  }
+  .ctx-ring-bg {
+    fill: none;
+    stroke: var(--bg-0);
+    stroke-width: 3;
+  }
+  .ctx-ring-fg {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 3;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 600ms var(--ease), stroke 400ms var(--ease);
+  }
+
+  .ctx-ring-pct {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 8px/1 var(--font);
+    color: var(--text-2);
+    pointer-events: none;
+  }
+
+  /* Pulse animation while summarising */
+  .ctx-ring-wrap.compacting .ctx-ring-fg {
+    animation: ctx-pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes ctx-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  /* Brief green flash after successful compaction */
+  .ctx-ring-wrap.compacted .ctx-ring-fg {
+    stroke: var(--green) !important;
+    filter: drop-shadow(0 0 4px var(--green));
+    transition: filter 300ms var(--ease);
+  }
 
   progress {
     display: block; width: 100%;
