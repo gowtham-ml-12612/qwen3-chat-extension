@@ -1,5 +1,10 @@
 import { ENGINE_PORT, type EngineEvent } from "./messages";
-import { MODEL_LABEL } from "./models";
+import {
+  MODEL_LABEL,
+  CONTEXT_SIZES,
+  DEFAULT_CONTEXT_TOKENS,
+  isContextTokens,
+} from "./models";
 import { MODES, DEFAULT_MODE, EFFORT_MODES, isEffortMode, type EffortMode } from "./modes";
 import { PANEL_CSS } from "./panel-styles";
 
@@ -48,6 +53,10 @@ shadow.innerHTML = `
       </div>
     </div>
     <div class="modes" id="mode-switch" role="tablist" aria-label="Effort mode"></div>
+    <div class="ctx-row">
+      <label class="ctx-label" for="ctx-select" title="Context window — how much conversation the model can hold. Changing it reloads the model.">Context</label>
+      <select id="ctx-select" class="ctx-select" title="Context window size — larger holds more but uses more memory; changing it reloads the model" disabled></select>
+    </div>
     <div id="status">Loading model…</div>
     <progress id="load-progress" max="1" value="0"></progress>
   </header>
@@ -91,6 +100,7 @@ const copyBtn        = q<HTMLButtonElement>("copy-btn");
 const closeBtn       = q<HTMLButtonElement>("close-btn");
 const dragHandle     = q("drag-handle");
 const modeSwitchEl   = q("mode-switch");
+const ctxSelectEl    = q<HTMLSelectElement>("ctx-select");
 const welcomeEl      = q("welcome");
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -109,6 +119,12 @@ let activeReqId: string | undefined;
 // Selected effort tier (Flash/Focus/Forge); persisted across sessions.
 let mode: EffortMode = DEFAULT_MODE;
 const modeBtns = new Map<EffortMode, HTMLButtonElement>();
+
+// Chosen context-window size (tokens); persisted. This is the size we REQUEST;
+// the size actually in effect (after any OOM fallback) is `activeCtx`, set from
+// the engine's `loaded` event.
+let ctxTokens = DEFAULT_CONTEXT_TOKENS;
+let activeCtx = DEFAULT_CONTEXT_TOKENS;
 
 let port: chrome.runtime.Port | undefined;
 
@@ -134,7 +150,7 @@ function setReady(ready: boolean) {
 }
 
 function setIdleStatus() {
-  statusEl.textContent = `${MODEL_LABEL} · ${MODES[mode].label}`;
+  statusEl.textContent = `${MODEL_LABEL} · ${MODES[mode].label} · ${(activeCtx / 1024).toFixed(0)}K`;
 }
 
 // ── Effort mode (Flash / Focus / Forge) ───────────────────────────────────────
@@ -178,6 +194,73 @@ function loadMode() {
     const stored = res?.[MODE_STORAGE_KEY];
     if (isEffortMode(stored)) mode = stored;
     reflectMode();
+  });
+}
+
+// ── Context window (8K / 16K / 32K) ────────────────────────────────────────────
+// Unlike effort mode, changing this is NOT instant: the engine must reload the
+// model (the KV-cache is fixed at load). So switching shows load progress and
+// the picker is disabled while a switch is in flight.
+
+const CTX_STORAGE_KEY = "qwenContextTokens";
+
+function renderCtxSelect() {
+  for (const opt of CONTEXT_SIZES) {
+    const o = document.createElement("option");
+    o.value = String(opt.tokens);
+    o.textContent = opt.label;
+    o.title = opt.hint;
+    ctxSelectEl.appendChild(o);
+  }
+  ctxSelectEl.value = String(ctxTokens);
+  ctxSelectEl.addEventListener("change", () => {
+    const next = Number(ctxSelectEl.value);
+    if (isContextTokens(next)) setCtx(next);
+  });
+}
+
+// Reflect the dropdown to a given token value (used after load/fallback so the
+// UI shows what's actually in effect, not just what was requested).
+function reflectCtx(tokens: number) {
+  if (isContextTokens(tokens)) ctxSelectEl.value = String(tokens);
+}
+
+// Request a context-size change: persist it, then ask the engine to (re)load at
+// the new size. The dropdown is locked until the engine reports back.
+function setCtx(next: number) {
+  if (next === ctxTokens && next === activeCtx) return;
+  ctxTokens = next;
+  chrome.storage?.local?.set({ [CTX_STORAGE_KEY]: next });
+
+  if (!port) {
+    // Not connected yet — the choice will be sent on first load.
+    return;
+  }
+  // Lock interaction and show that a reload is happening.
+  busy = true;
+  setReady(false);
+  ctxSelectEl.disabled = true;
+  progressEl.hidden = false;
+  progressEl.value = 0;
+  statusEl.textContent = `Switching to ${(next / 1024).toFixed(0)}K context…`;
+  try {
+    port.postMessage({ cmd: "load", nCtx: next });
+  } catch (e) {
+    // Port gone; reconnect on next open will apply the stored choice.
+    console.warn("[panel] port.postMessage failed for ctx switch:", e);
+    setReady(modelReady);
+    ctxSelectEl.disabled = false;
+  }
+}
+
+function loadCtx() {
+  chrome.storage?.local?.get(CTX_STORAGE_KEY, (res) => {
+    const stored = res?.[CTX_STORAGE_KEY];
+    if (isContextTokens(stored)) {
+      ctxTokens = stored;
+      activeCtx = stored;
+    }
+    reflectCtx(ctxTokens);
   });
 }
 
@@ -262,13 +345,34 @@ function onEngineEvent(ev: EngineEvent) {
       progressEl.hidden = true;
       busy = false;
       setReady(true);
+      ctxSelectEl.disabled = false;
       setIdleStatus();
       inputEl.focus();
+      break;
+    case "loaded":
+      // The size actually in effect (may be smaller than requested on OOM).
+      activeCtx = ev.nCtx;
+      reflectCtx(ev.nCtx);
+      ctxSelectEl.disabled = false;
+      if (ev.fellBack) {
+        // Show what actually loaded (not the user's preference) so the status
+        // and dropdown reflect reality. But do NOT persist the fallback value —
+        // the user explicitly chose a larger size, and a future device / update
+        // may handle it. They can manually pick a smaller size if they want to
+        // make it stick.
+        console.info(
+          `[panel] Context fell back to ${ev.nCtx} — keeping stored preference at ${ctxTokens}`,
+        );
+      }
+      if (modelReady && !generating) setIdleStatus();
       break;
     case "loaderror":
       progressEl.hidden = true;
       busy = false;
       setReady(false);
+      // Re-enable the picker so the user can choose a smaller size and retry.
+      ctxSelectEl.disabled = false;
+      reflectCtx(activeCtx);
       statusEl.textContent = `Error: ${ev.message}`;
       break;
     case "status":
@@ -303,6 +407,7 @@ function connectEngine() {
     for (const p of pending.values()) p.reject(new Error("Engine disconnected"));
     pending.clear();
     setReady(false);
+    ctxSelectEl.disabled = true;
     if (host.style.display !== "none") {
       statusEl.textContent = "Disconnected — reopen to reconnect";
     }
@@ -315,10 +420,13 @@ function startLoad() {
   loadStarted = true;
   busy = true;
   setReady(false);
+  ctxSelectEl.disabled = true;
   progressEl.hidden = false;
   progressEl.value = 0;
   statusEl.textContent = `Loading ${MODEL_LABEL}…`;
-  port!.postMessage({ cmd: "load" });
+  // Carry the user's chosen context size into the very first load so we never
+  // load at the default only to immediately reload at their preference.
+  port!.postMessage({ cmd: "load", nCtx: ctxTokens });
 }
 
 function runChat(
@@ -725,6 +833,8 @@ stopBtn.addEventListener("click", stopGeneration);
 
 renderModeSwitch();
 loadMode();
+renderCtxSelect();
+loadCtx();
 
 // ── Toggle from background (action click) ────────────────────────────────────
 

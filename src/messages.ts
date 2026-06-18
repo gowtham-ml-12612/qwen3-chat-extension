@@ -11,7 +11,15 @@ import type { EffortMode } from "./modes";
 // ── content → SW (over the long-lived Port) ───────────────────────────────────
 
 export type ClientCmd =
-  | { cmd: "load" }
+  | {
+      cmd: "load";
+      /**
+       * Requested context window in tokens. When omitted the engine uses its
+       * default. When this differs from the currently loaded size the engine
+       * reloads the model (the KV-cache can't be resized live).
+       */
+      nCtx?: number;
+    }
   | {
       cmd: "chat";
       reqId: string;
@@ -34,6 +42,17 @@ export type ClientCmd =
 export type EngineEvent =
   | { kind: "progress"; text: string; progress: number }
   | { kind: "ready" }
+  | {
+      /**
+       * Model finished loading. Reports the context size actually in effect,
+       * which may be smaller than requested if a larger size hit OOM and the
+       * engine fell back. The panel reflects this real value in its dropdown.
+       */
+      kind: "loaded";
+      nCtx: number;
+      /** True when the engine fell back to a smaller size than requested. */
+      fellBack: boolean;
+    }
   | { kind: "loaderror"; message: string }
   | { kind: "status"; reqId: string; text: string }
   | { kind: "delta"; reqId: string; text: string }

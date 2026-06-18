@@ -7,7 +7,7 @@
 
 import { Wllama } from "@wllama/wllama/esm/index.js";
 import type { ChatCompletionMessage } from "@wllama/wllama/esm/index.js";
-import { MODEL } from "./models";
+import { MODEL, DEFAULT_CONTEXT_TOKENS, CONTEXT_SIZES, isContextTokens, fallbackContextTokens } from "./models";
 import { MODES, DEFAULT_MODE, type EffortMode, type ModeConfig } from "./modes";
 import { stripThinking } from "./stripThinking";
 import { buildSystemPrompt, SUMMARY_SYSTEM, buildSummaryUserPrompt } from "./prompts";
@@ -31,7 +31,11 @@ let state: LoadState = "idle";
 let loadError = "";
 // Real context window, read from the model after load (falls back to config).
 let ctxSize = MODEL.nCtx;
-
+// Context size to load with. Changeable from the panel; a change while loaded
+// triggers a reload, since the KV-cache is fixed at load time.
+let requestedCtx = DEFAULT_CONTEXT_TOKENS;
+// True when the last load fell back to a smaller size than requested (OOM).
+let ctxFellBack = false;
 // Clients waiting for the model to finish loading (so we can broadcast progress).
 const loadWaiters = new Set<number>();
 
@@ -82,8 +86,15 @@ function broadcast(event: EngineEvent): void {
 // ── Loading ───────────────────────────────────────────────────────────────────
 
 async function ensureLoaded(clientId: number): Promise<void> {
-  if (state === "ready") {
+  // Already loaded at the size the client wants — nothing to do.
+  if (state === "ready" && ctxSize === requestedCtx) {
     relay(clientId, { kind: "ready" });
+    relay(clientId, { kind: "loaded", nCtx: ctxSize, fellBack: ctxFellBack });
+    return;
+  }
+  // Loaded, but the client asked for a different context size: reload.
+  if (state === "ready" && ctxSize !== requestedCtx) {
+    await reload();
     return;
   }
   if (state === "error") {
@@ -97,48 +108,146 @@ async function ensureLoaded(clientId: number): Promise<void> {
   await doLoad();
 }
 
-async function doLoad(): Promise<void> {
+// Change the context window the model runs with. A no-op if it matches the
+// current request; otherwise records the new target and reloads when loaded.
+async function setContextSize(clientId: number, tokens: number): Promise<void> {
+  if (!isContextTokens(tokens)) return;
+  if (tokens === requestedCtx && state === "ready" && ctxSize === tokens) {
+    relay(clientId, { kind: "loaded", nCtx: ctxSize, fellBack: ctxFellBack });
+    return;
+  }
+  requestedCtx = tokens;
+  // Subscribe every interested client so they all see reload progress/result.
+  loadWaiters.add(clientId);
+  if (state === "ready") {
+    await reload();
+  } else if (state === "idle" || state === "error") {
+    state = "loading";
+    await doLoad();
+  }
+  // If state === "loading", the in-flight load will pick up requestedCtx on its
+  // next attempt; nothing to do here.
+}
+
+// Tear down the loaded model and load again at the current requestedCtx. The
+// KV-cache is allocated at load, so this full reload is the only way to change
+// context size. Aborts any in-flight generation first.
+async function reload(): Promise<void> {
+  if (current) {
+    current.controller.abort();
+    current = undefined;
+  }
   try {
-    // The wasm is copied to the extension root at build time (see package.json)
-    // and loaded by its stable extension URL — no inline import map (which MV3's
-    // CSP would block) and no hashed filename to track.
-    wllama = new Wllama({ default: chrome.runtime.getURL("wllama.wasm") });
+    await wllama?.exit();
+  } catch {
+    // Best effort — proceed to reload regardless.
+  }
+  wllama = undefined;
+  state = "loading";
+  broadcast({
+    kind: "progress",
+    text: `Switching to ${(requestedCtx / 1024).toFixed(0)}K context…`,
+    progress: 0,
+  });
+  await doLoad();
+}
 
-    const mb = (n: number) => (n / 1048576).toFixed(0);
-    let lastWhole = -1;
+// True when a thrown load error looks like an out-of-memory / wasm abort, the
+// signature of the KV-cache failing to allocate at a large context size.
+function isOomError(err: unknown): boolean {
+  if (err instanceof Error && err.name === "RuntimeError") return true;
+  const msg = err instanceof Error ? err.message : String(err);
+  return /\(ABORT\)|out of memory|OOM|memory access out of bounds|allocation failed/i.test(msg);
+}
 
-    await wllama.loadModelFromHF(
-      { repo: MODEL.repo, quant: MODEL.quant, mmprojFile: MODEL.mmprojFile },
-      {
-        n_ctx: MODEL.nCtx,
-        n_gpu_layers: 999, // offload everything to WebGPU when available
-        jinja: true, // use the model's own chat template (places vision tokens)
-        image_max_tokens: MODEL.imageMaxTokens,
-        progressCallback: ({ loaded, total }) => {
-          const pct = total > 0 ? loaded / total : 0;
-          const whole = Math.floor(pct * 100);
-          if (whole === lastWhole) return;
-          lastWhole = whole;
+// Load the model once at the given context size. Throws on failure so the caller
+// can decide whether to retry smaller.
+async function loadAt(nCtx: number): Promise<void> {
+  // The wasm is copied to the extension root at build time (see package.json)
+  // and loaded by its stable extension URL — no inline import map (which MV3's
+  // CSP would block) and no hashed filename to track.
+  wllama = new Wllama({ default: chrome.runtime.getURL("wllama.wasm") });
+
+  const mb = (n: number) => (n / 1048576).toFixed(0);
+  let lastWhole = -1;
+
+  await wllama.loadModelFromHF(
+    { repo: MODEL.repo, quant: MODEL.quant, mmprojFile: MODEL.mmprojFile },
+    {
+      n_ctx: nCtx,
+      n_gpu_layers: 999, // offload everything to WebGPU when available
+      jinja: true, // use the model's own chat template (places vision tokens)
+      image_max_tokens: MODEL.imageMaxTokens,
+      progressCallback: ({ loaded, total }) => {
+        const pct = total > 0 ? loaded / total : 0;
+        const whole = Math.floor(pct * 100);
+        if (whole === lastWhole) return;
+        lastWhole = whole;
+        broadcast({
+          kind: "progress",
+          text:
+            total > 0
+              ? `Downloading ${MODEL.label} — ${mb(loaded)}/${mb(total)} MB (${whole}%)`
+              : `Downloading ${MODEL.label}…`,
+          progress: pct,
+        });
+      },
+    },
+  );
+}
+
+async function doLoad(): Promise<void> {
+  // Walk down through context sizes on OOM: try the requested size, and if the
+  // KV-cache won't allocate, fall back to the next smaller one rather than
+  // leaving the panel with no model. Non-OOM errors surface immediately.
+  let target = requestedCtx;
+  ctxFellBack = false;
+  try {
+    // Guard: at most CONTEXT_SIZES.length attempts (one per available size).
+    // Prevents infinite loops if the fallback chain is ever misconfigured.
+    const MAX_FALLBACK_ATTEMPTS = CONTEXT_SIZES.length;
+    let attempts = 0;
+    for (;;) {
+      if (++attempts > MAX_FALLBACK_ATTEMPTS) {
+        throw new Error("Exhausted all context-size fallbacks without a successful load");
+      }
+      try {
+        await loadAt(target);
+        break;
+      } catch (err) {
+        const smaller = fallbackContextTokens(target);
+        if (isOomError(err) && smaller !== undefined) {
+          // Clean up the partially-initialised instance before retrying.
+          try {
+            await wllama?.exit();
+          } catch {
+            /* best effort */
+          }
+          wllama = undefined;
+          ctxFellBack = true;
           broadcast({
             kind: "progress",
-            text:
-              total > 0
-                ? `Downloading ${MODEL.label} — ${mb(loaded)}/${mb(total)} MB (${whole}%)`
-                : `Downloading ${MODEL.label}…`,
-            progress: pct,
+            text: `${(target / 1024).toFixed(0)}K didn't fit — retrying at ${(smaller / 1024).toFixed(0)}K…`,
+            progress: 0,
           });
-        },
-      },
-    );
+          target = smaller;
+          continue;
+        }
+        throw err;
+      }
+    }
 
+    // Reflect the size we actually settled on, so a later switch compares right.
+    requestedCtx = target;
     try {
-      ctxSize = wllama.getLoadedContextInfo().n_ctx || MODEL.nCtx;
+      ctxSize = wllama?.getLoadedContextInfo().n_ctx || target;
     } catch {
-      ctxSize = MODEL.nCtx;
+      ctxSize = target;
     }
 
     state = "ready";
     broadcast({ kind: "ready" });
+    broadcast({ kind: "loaded", nCtx: ctxSize, fellBack: ctxFellBack });
   } catch (err) {
     state = "error";
     loadError = err instanceof Error ? err.message : String(err);
@@ -403,7 +512,13 @@ chrome.runtime.onMessage.addListener((msg: ToOffscreen | { to?: string }) => {
   const m = msg as ToOffscreen;
   switch (m.cmd) {
     case "load":
-      void ensureLoaded(m.clientId);
+      // An explicit size on load selects the context window before first load,
+      // or reloads if it differs from what's already loaded.
+      if (isContextTokens(m.nCtx)) {
+        void setContextSize(m.clientId, m.nCtx);
+      } else {
+        void ensureLoaded(m.clientId);
+      }
       break;
     case "chat":
       enqueue({

@@ -105,6 +105,46 @@ export const PANEL_CSS = /* css */ `
   .mode.active { background: var(--accent); color: var(--bg-1); box-shadow: 0 1px 4px rgba(124,156,255,0.25); }
   .mode[data-mode="forge"].active { background: var(--forge); box-shadow: 0 1px 4px rgba(240,160,80,0.25); }
 
+  /* ── Context-window picker ──────────────────────────────────────────────── */
+  .ctx-row {
+    display: flex; align-items: center; gap: 8px;
+    margin: 0 0 8px;
+  }
+  .ctx-label {
+    font: 600 10px/1 var(--font);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    flex-shrink: 0;
+    cursor: default;
+  }
+  .ctx-select {
+    flex: 1;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-0);
+    color: var(--text-2);
+    font: 600 11px/1 var(--font);
+    padding: 7px 26px 7px 10px;
+    cursor: pointer;
+    transition: all 150ms var(--ease);
+    /* caret */
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--text-3) 50%),
+      linear-gradient(135deg, var(--text-3) 50%, transparent 50%);
+    background-position:
+      calc(100% - 14px) calc(50% - 1px),
+      calc(100% - 9px) calc(50% - 1px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+  }
+  .ctx-select:hover:not(:disabled) { color: var(--text-1); border-color: var(--border-s); background-color: var(--bg-1); }
+  .ctx-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-d); }
+  .ctx-select:disabled { opacity: 0.45; cursor: not-allowed; }
+  .ctx-select option { background: var(--bg-2); color: var(--text-1); }
+
   #close-btn { color: var(--red); }
   #close-btn:hover { background: var(--red-d); }
 
