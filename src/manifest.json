@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Qwen Chat",
+  "version": "0.0.1",
+  "description": "Local Qwen3.5 (vision + text) chat assistant — runs in your browser via wllama",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; worker-src 'self'; default-src 'self' data: blob:; connect-src 'self' data: blob: https://huggingface.co https://*.huggingface.co https://*.hf.co https://*.xethub.hf.co https://raw.githubusercontent.com"
+  },
+  "background": {
+    "service_worker": "background.ts",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Qwen Chat"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.zoho.com/*",
+        "*://*.zoho.in/*",
+        "*://*.zoho.eu/*",
+        "*://*.zoho.com.au/*",
+        "*://*.zoho.com.cn/*",
+        "*://*.zohopublic.com/*",
+        "*://*.localzoho.com/*"
+      ],
+      "js": ["content.ts"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["storage", "unlimitedStorage", "scripting", "activeTab", "offscreen"],
+  "host_permissions": ["<all_urls>"],
+  "web_accessible_resources": [
+    {
+      "resources": ["offscreen.html"],
+      "matches": []
+    }
+  ]
+}

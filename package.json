@@ -1,0 +1,32 @@
+{
+  "name": "qwen3-chat-extension",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf dist .parcel-cache",
+    "copy-wasm": "cp node_modules/@wllama/wllama/esm/wasm/wllama.wasm dist/wllama.wasm",
+    "build": "npm run clean && parcel build src/manifest.json --config @parcel/config-webextension && npm run copy-wasm",
+    "dev": "parcel watch src/manifest.json --config @parcel/config-webextension",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/"
+  },
+  "dependencies": {
+    "@wllama/wllama": "^3.5.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@parcel/config-webextension": "^2.9.3",
+    "@types/chrome": "^0.1.43",
+    "buffer": "^6.0.3",
+    "eslint": "^10.5.0",
+    "eslint-config-prettier": "^10.1.8",
+    "parcel": "^2.9.3",
+    "prettier": "^3.8.4",
+    "process": "^0.11.10",
+    "typescript-eslint": "^8.61.1",
+    "url": "^0.11.1"
+  }
+}
