@@ -43,7 +43,6 @@ shadow.innerHTML = `
       <h1>Qwen Chat</h1>
       <div class="hbtns">
         <button class="ibtn" id="new-chat-btn" title="New chat" disabled>↺</button>
-        <button class="ibtn" id="slide-img-btn" title="Get slide image">⊡</button>
         <button class="ibtn" id="copy-btn" title="Copy conversation log" disabled>⧉</button>
         <button class="ibtn" id="close-btn" title="Close">✕</button>
       </div>
@@ -52,15 +51,6 @@ shadow.innerHTML = `
     <div id="status">Loading model…</div>
     <progress id="load-progress" max="1" value="0"></progress>
   </header>
-
-  <div id="slide-preview" hidden>
-    <div class="preview-bar">
-      <span>Slide preview</span>
-      <button class="ibtn" id="hide-preview-btn" title="Hide preview">✕</button>
-    </div>
-    <img id="slide-img" alt="Current slide" />
-    <div id="slide-err" hidden></div>
-  </div>
 
   <main id="messages">
     <div id="welcome">
@@ -97,14 +87,9 @@ const inputEl    = q<HTMLTextAreaElement>("input");
 const sendBtn    = q<HTMLButtonElement>("send-btn");
 const stopBtn    = q<HTMLButtonElement>("stop-btn");
 const newChatBtn     = q<HTMLButtonElement>("new-chat-btn");
-const slideImgBtn    = q<HTMLButtonElement>("slide-img-btn");
 const copyBtn        = q<HTMLButtonElement>("copy-btn");
 const closeBtn       = q<HTMLButtonElement>("close-btn");
 const dragHandle     = q("drag-handle");
-const slidePreviewEl = q("slide-preview");
-const slideImgEl     = q<HTMLImageElement>("slide-img");
-const slideErrEl     = q("slide-err");
-const hidePreviewBtn = q<HTMLButtonElement>("hide-preview-btn");
 const modeSwitchEl   = q("mode-switch");
 const welcomeEl      = q("welcome");
 
@@ -520,11 +505,6 @@ async function sendMessage() {
       statusEl.textContent = "Capturing slide…";
       const rawUrl = await captureSlideViaWorker();
 
-      slideErrEl.hidden = true;
-      slideImgEl.src = rawUrl;
-      slideImgEl.hidden = false;
-      slidePreviewEl.removeAttribute("hidden");
-
       image = await downscaleToDataUrl(rawUrl, MODES[activeMode].imageMaxDim);
       replyEl.classList.add("vision");
     }
@@ -579,8 +559,6 @@ function stopGeneration() {
 // we ask the service worker to run the capture in the page's MAIN world and
 // hand back a JPEG data URL.
 
-let slideBusy = false;
-
 function captureSlideViaWorker(): Promise<string> {
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage({ type: "getSlideImage" }, (resp) => {
@@ -622,35 +600,6 @@ function downscaleToDataUrl(dataUrl: string, maxDim = 1600, quality = 0.85): Pro
   });
 }
 
-function getSlideImage() {
-  if (slideBusy) return;
-  slideBusy = true;
-
-  slideImgBtn.disabled = true;
-  slideImgBtn.textContent = "…";
-  slideErrEl.hidden = true;
-
-  captureSlideViaWorker()
-    .then((dataUrl) => {
-      slideErrEl.hidden = true;
-      slideImgEl.src = dataUrl;
-      slideImgEl.hidden = false;
-      slidePreviewEl.removeAttribute("hidden");
-    })
-    .catch((err) => showSlideError(err instanceof Error ? err.message : String(err)))
-    .finally(() => {
-      slideBusy = false;
-      slideImgBtn.disabled = false;
-      slideImgBtn.textContent = "⊡";
-    });
-}
-
-function showSlideError(msg: string) {
-  slideErrEl.textContent = msg;
-  slideErrEl.hidden = false;
-  slideImgEl.hidden = true;
-  slidePreviewEl.removeAttribute("hidden");
-}
 
 // ── Drag ──────────────────────────────────────────────────────────────────────
 
@@ -747,8 +696,6 @@ function onResize(e: MouseEvent) {
 
 // ── UI events ─────────────────────────────────────────────────────────────────
 
-slideImgBtn.addEventListener("click", getSlideImage);
-hidePreviewBtn.addEventListener("click", () => { slidePreviewEl.hidden = true; });
 copyBtn.addEventListener("click", copyChat);
 closeBtn.addEventListener("click", () => { host.style.display = "none"; });
 
