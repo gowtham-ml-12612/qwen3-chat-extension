@@ -1,0 +1,113 @@
+# AI Tool & Recipe Architecture
+
+The assistant is **tool-using**. Every user turn flows through one pipeline:
+
+```
+User Prompt
+   │
+   ▼
+selectTool()        ← ONE inference call: model sees tool definitions (with
+   │                   param schemas), picks the tool, and extracts arguments
+   │                   Output: {"tool":"change_theme","args":{"theme_name":"Starter"}}
+   │
+   ▼
+executeWithConfirmation()  ← gates mutating tools when interactionMode is "ask"
+   │
+   ▼
+tool.run(ctx)       ← the tool executes with pre-extracted ctx.args
+   │
+   ▼
+dispatcher          ← commits result to history, injects context if remember=true
+```
+
+## File Structure (modular)
+
+```
+src/
+├── sidepanel/
+│   ├── index.ts            # Entry point: wires engine, tools, UI, state
+│   ├── types.ts            # Shared interfaces (Tool, ToolContext, ToolResult, etc.)
+│   ├── state.ts            # App state, storage keys, persistence helpers
+│   ├── engine-client.ts    # Engine port management, runChat, runInference
+│   ├── tool-registry.ts    # Tool registration, selection prompt, selectTool()
+│   ├── confirmation.ts     # "Ask before acting" confirmation gate
+│   ├── markdown.ts         # Lightweight Markdown → HTML renderer
+│   ├── image-utils.ts      # Image downscale, file reading, drag-and-drop
+│   └── tools/
+│       ├── index.ts        # Re-exports all tools
+│       ├── create-presentation.ts
+│       ├── change-theme.ts
+│       ├── screenshot.ts
+│       ├── doccontext.ts
+│       ├── slidecontext.ts
+│       └── chat.ts         # Default "none" tool (general conversation)
+├── zoho/
+│   └── api.ts              # All Zoho Show API interactions (centralized)
+├── background.ts           # Service worker: relay, CDP, Zoho script injection
+├── content.ts              # DOM agent: collectElements, executeAction
+├── offscreen.ts            # wllama engine: model load, chat, agentStep
+├── messages.ts             # Typed inter-context message protocol
+├── models.ts               # Model config + context size options
+├── modes.ts                # Effort modes (flash/focus/forge/max)
+├── actions.ts              # Agent action types + JSON parsing
+├── recipes.ts              # Recipe definitions and step types
+├── prompts.ts              # System prompts (chat, agent, summarization)
+├── session.ts              # Engine-owned session state + compaction
+├── themes.ts               # Theme catalogue + lookup helpers
+├── slide-data.ts           # Parse Zoho slide/master data
+├── debug-log.ts            # Debug log panel
+└── stripThinking.ts        # Strip Qwen thinking tags
+```
+
+## Adding a New Tool
+
+1. Create `src/sidepanel/tools/your-tool.ts`:
+
+```typescript
+import type { Tool, ToolContext, ToolResult } from "../types";
+
+export const yourTool: Tool = {
+  name: "your_tool",
+  description: "user wants to … (be specific and mutually exclusive vs others)",
+  params: [
+    { name: "target", type: "string", description: "what to act on", required: true },
+  ],
+  mutating: true,  // set true if it changes the presentation
+  async run(ctx: ToolContext): Promise<ToolResult | null> {
+    const target = ctx.args.target;
+    ctx.setStatus("Working…");
+    if (ctx.isStopped()) return null;
+    // … do work, render into ctx.replyEl …
+    return { assistantText: "what happened", remember: true };
+  },
+};
+```
+
+2. Export from `src/sidepanel/tools/index.ts`
+3. Register in `src/sidepanel/index.ts` tools array
+
+That's it. The tool selection prompt is auto-generated from the registry.
+
+## Action Hierarchy (when to use what)
+
+1. **Zoho API calls** (via `zoho/api.ts`) — fastest, most reliable. Use when an
+   internal API exists (changeTheme, getSlideData, createPresentation).
+2. **Recipes** (`recipes.ts`) — deterministic step sequences. Use when no API exists
+   but steps are predictable.
+3. **Agent loop** (`actions.ts` + observe/act) — model-driven DOM interaction. Only
+   for truly open-ended navigation where steps can't be predicted.
+
+## Confirmation Flow
+
+Tools marked `mutating: true` are gated by `executeWithConfirmation()` when
+`interactionMode === "ask"`. The confirmation dialog shows what will happen and
+requires explicit user approval before proceeding.
+
+## Key Principles
+
+- **Single-call routing** — one inference call selects the tool AND extracts args.
+- **AI decides, code executes** — the model picks; hard-coded code acts.
+- **Single source of truth** — `tools[]` array drives prompt, schema, and dispatch.
+- **Centralized Zoho API** — all Zoho interactions go through `zoho/api.ts`.
+- **Confirmation before mutation** — mutating tools respect interactionMode.
+- **Live state over memory** — fetch live data instead of relying on chat memory.

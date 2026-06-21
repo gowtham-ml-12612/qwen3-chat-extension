@@ -36,6 +36,8 @@ let ctxSize = MODEL.nCtx;
 let requestedCtx = DEFAULT_CONTEXT_TOKENS;
 // True when the last load fell back to a smaller size than requested (OOM).
 let ctxFellBack = false;
+// The context size that was originally requested before an OOM fallback.
+let fallbackOriginalCtx = 0;
 // Clients waiting for the model to finish loading (so we can broadcast progress).
 const loadWaiters = new Set<number>();
 
@@ -52,6 +54,7 @@ function getSession(clientId: number): Session {
 }
 
 interface ChatJob {
+  kind: "chat";
   clientId: number;
   reqId: string;
   text: string;
@@ -59,6 +62,20 @@ interface ChatJob {
   /** Base64 JPEG data URL (decoded to bytes here before inference). */
   image?: string;
 }
+
+// One step of the agent loop: a stateless generation (no session). Carries its
+// own fully-built system + user prompts and the page screenshot.
+interface AgentStepJob {
+  kind: "agentStep";
+  clientId: number;
+  reqId: string;
+  system: string;
+  user: string;
+  mode: EffortMode;
+  image?: string;
+}
+
+type Job = ChatJob | AgentStepJob;
 
 // Extension messaging is JSON-only, so the image arrives as a base64 data URL.
 // Turn it back into the raw file bytes wllama's vision encoder expects.
@@ -69,41 +86,60 @@ function dataUrlToArrayBuffer(dataUrl: string): ArrayBuffer {
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
   return bytes.buffer;
 }
-const jobs: ChatJob[] = [];
+const jobs: Job[] = [];
 let draining = false;
 
 // The job currently generating, so a Stop press can abort it mid-stream.
 let current: { clientId: number; reqId: string; controller: AbortController } | undefined;
 
 function relay(clientId: number, event: EngineEvent): void {
+  if (event.kind !== "delta") {
+    console.log(`[OS][relay] clientId=${clientId} kind="${event.kind}"`, JSON.stringify(event).slice(0, 300));
+  }
   chrome.runtime.sendMessage({ to: "relay", clientId, ...event }).catch(() => {});
 }
 
 function broadcast(event: EngineEvent): void {
+  if (event.kind !== "delta") {
+    console.log(`[OS][broadcast] kind="${event.kind}" to ${loadWaiters.size} waiters`, JSON.stringify(event).slice(0, 300));
+  }
   for (const id of loadWaiters) relay(id, event);
 }
 
 // ── Loading ───────────────────────────────────────────────────────────────────
 
 async function ensureLoaded(clientId: number): Promise<void> {
+  console.log(`[OS][ensureLoaded] clientId=${clientId} state="${state}" ctxSize=${ctxSize} requestedCtx=${requestedCtx}`);
   // Already loaded at the size the client wants — nothing to do.
   if (state === "ready" && ctxSize === requestedCtx) {
+    console.log(`[OS][ensureLoaded] already ready at requested size, sending ready+loaded`);
     relay(clientId, { kind: "ready" });
-    relay(clientId, { kind: "loaded", nCtx: ctxSize, fellBack: ctxFellBack });
+    relay(clientId, {
+      kind: "loaded",
+      nCtx: ctxSize,
+      fellBack: ctxFellBack,
+      requestedCtx: ctxFellBack ? fallbackOriginalCtx : ctxSize,
+    });
     return;
   }
   // Loaded, but the client asked for a different context size: reload.
   if (state === "ready" && ctxSize !== requestedCtx) {
+    console.log(`[OS][ensureLoaded] ctx mismatch (loaded=${ctxSize} vs requested=${requestedCtx}) → reload`);
     await reload();
     return;
   }
   if (state === "error") {
+    console.log(`[OS][ensureLoaded] in error state: "${loadError}"`);
     relay(clientId, { kind: "loaderror", message: loadError });
     return;
   }
   loadWaiters.add(clientId);
   relay(clientId, { kind: "progress", text: `Preparing ${MODEL.label}…`, progress: 0 });
-  if (state === "loading") return; // already in flight; this client now subscribed
+  if (state === "loading") {
+    console.log(`[OS][ensureLoaded] already loading, added client to waiters`);
+    return;
+  }
+  console.log(`[OS][ensureLoaded] starting fresh load`);
   state = "loading";
   await doLoad();
 }
@@ -113,7 +149,12 @@ async function ensureLoaded(clientId: number): Promise<void> {
 async function setContextSize(clientId: number, tokens: number): Promise<void> {
   if (!isContextTokens(tokens)) return;
   if (tokens === requestedCtx && state === "ready" && ctxSize === tokens) {
-    relay(clientId, { kind: "loaded", nCtx: ctxSize, fellBack: ctxFellBack });
+    relay(clientId, {
+      kind: "loaded",
+      nCtx: ctxSize,
+      fellBack: ctxFellBack,
+      requestedCtx: ctxFellBack ? fallbackOriginalCtx : ctxSize,
+    });
     return;
   }
   requestedCtx = tokens;
@@ -157,6 +198,9 @@ async function reload(): Promise<void> {
 function isOomError(err: unknown): boolean {
   if (err instanceof Error && err.name === "RuntimeError") return true;
   const msg = err instanceof Error ? err.message : String(err);
+  // "replace is not a function" happens when wllama's abort handler receives a
+  // non-string message from the wasm engine during an OOM crash (upstream bug).
+  if (msg.includes("replace is not a function")) return true;
   return /\(ABORT\)|out of memory|OOM|memory access out of bounds|allocation failed/i.test(msg);
 }
 
@@ -197,14 +241,12 @@ async function loadAt(nCtx: number): Promise<void> {
 }
 
 async function doLoad(): Promise<void> {
-  // Walk down through context sizes on OOM: try the requested size, and if the
-  // KV-cache won't allocate, fall back to the next smaller one rather than
-  // leaving the panel with no model. Non-OOM errors surface immediately.
+  console.log(`[OS][doLoad] ── BEGIN ── requestedCtx=${requestedCtx}`);
+  const originalRequest = requestedCtx;
   let target = requestedCtx;
   ctxFellBack = false;
+  fallbackOriginalCtx = 0;
   try {
-    // Guard: at most CONTEXT_SIZES.length attempts (one per available size).
-    // Prevents infinite loops if the fallback chain is ever misconfigured.
     const MAX_FALLBACK_ATTEMPTS = CONTEXT_SIZES.length;
     let attempts = 0;
     for (;;) {
@@ -215,29 +257,37 @@ async function doLoad(): Promise<void> {
         await loadAt(target);
         break;
       } catch (err) {
+        if (!isOomError(err)) throw err;
+
         const smaller = fallbackContextTokens(target);
-        if (isOomError(err) && smaller !== undefined) {
-          // Clean up the partially-initialised instance before retrying.
-          try {
-            await wllama?.exit();
-          } catch {
-            /* best effort */
-          }
-          wllama = undefined;
-          ctxFellBack = true;
-          broadcast({
-            kind: "progress",
-            text: `${(target / 1024).toFixed(0)}K didn't fit — retrying at ${(smaller / 1024).toFixed(0)}K…`,
-            progress: 0,
-          });
-          target = smaller;
-          continue;
+        // Clean up the partially-initialised instance before deciding.
+        try {
+          await wllama?.exit();
+        } catch {
+          /* best effort */
         }
-        throw err;
+        wllama = undefined;
+
+        if (smaller === undefined) {
+          // Even the smallest size (8K) failed — device can't run the model.
+          throw new Error(
+            "Not compatible — your device doesn't have enough memory to run this model. " +
+            "Try closing other tabs or apps and reload.",
+            { cause: err },
+          );
+        }
+
+        ctxFellBack = true;
+        fallbackOriginalCtx = originalRequest;
+        broadcast({
+          kind: "progress",
+          text: `${(target / 1024).toFixed(0)}K didn't fit — retrying at ${(smaller / 1024).toFixed(0)}K…`,
+          progress: 0,
+        });
+        target = smaller;
       }
     }
 
-    // Reflect the size we actually settled on, so a later switch compares right.
     requestedCtx = target;
     try {
       ctxSize = wllama?.getLoadedContextInfo().n_ctx || target;
@@ -245,12 +295,14 @@ async function doLoad(): Promise<void> {
       ctxSize = target;
     }
 
+    console.log(`[OS][doLoad] ── SUCCESS ── ctxSize=${ctxSize} fellBack=${ctxFellBack} original=${originalRequest}`);
     state = "ready";
     broadcast({ kind: "ready" });
-    broadcast({ kind: "loaded", nCtx: ctxSize, fellBack: ctxFellBack });
+    broadcast({ kind: "loaded", nCtx: ctxSize, fellBack: ctxFellBack, requestedCtx: originalRequest });
   } catch (err) {
     state = "error";
     loadError = err instanceof Error ? err.message : String(err);
+    console.error(`[OS][doLoad] ── FAILED ── ${loadError}`);
     broadcast({ kind: "loaderror", message: loadError });
   } finally {
     loadWaiters.clear();
@@ -259,18 +311,24 @@ async function doLoad(): Promise<void> {
 
 // ── Chat ────────────────────────────────────────────────────────────────────
 
-function enqueue(job: ChatJob): void {
+function enqueue(job: Job): void {
+  console.log(`[OS][enqueue] kind="${job.kind}" clientId=${job.clientId} reqId=${job.reqId} queueLen=${jobs.length} draining=${draining}`);
   jobs.push(job);
   if (!draining) void drain();
 }
 
 async function drain(): Promise<void> {
+  console.log(`[OS][drain] ── START ── ${jobs.length} jobs queued`);
   draining = true;
   try {
     while (jobs.length) {
-      await runChat(jobs.shift()!);
+      const job = jobs.shift()!;
+      console.log(`[OS][drain] processing: kind="${job.kind}" reqId=${job.reqId} remaining=${jobs.length}`);
+      if (job.kind === "agentStep") await runAgentStep(job);
+      else await runChat(job);
     }
   } finally {
+    console.log(`[OS][drain] ── END ──`);
     draining = false;
   }
 }
@@ -323,11 +381,12 @@ interface GenResult {
 // (thinking-stripped) text. A Stop is surfaced as a flag, not an exception, so
 // callers keep whatever was produced before it.
 async function generate(
-  job: ChatJob,
+  job: { clientId: number; reqId: string },
   cfg: ModeConfig,
   messages: ChatCompletionMessage[],
   signal: AbortSignal,
 ): Promise<GenResult> {
+  console.log(`[OS][generate] ── BEGIN ── reqId=${job.reqId} msgCount=${messages.length} maxTokens=${cfg.maxTokens} thinking=${cfg.thinking}`);
   let acc = "";
   try {
     const stream = await wllama!.createChatCompletion({
@@ -345,11 +404,14 @@ async function generate(
         relay(job.clientId, { kind: "delta", reqId: job.reqId, text: stripThinking(acc) });
       }
     }
+    console.log(`[OS][generate] ── END ── reqId=${job.reqId} accLen=${acc.length} strippedLen=${stripThinking(acc).length}`);
     return { text: stripThinking(acc), aborted: false };
   } catch (err) {
     if (signal.aborted || (err instanceof Error && err.name === "AbortError")) {
+      console.log(`[OS][generate] ── ABORTED ── reqId=${job.reqId} accLen=${acc.length}`);
       return { text: stripThinking(acc), aborted: true };
     }
+    console.error(`[OS][generate] ── ERROR ── reqId=${job.reqId}`, err);
     throw err;
   }
 }
@@ -426,6 +488,7 @@ function emitContextUsage(
     ratio: budget > 0 ? used / budget : 0,
     used,
     budget,
+    total: ctxSize,
     phase,
   });
 }
@@ -443,12 +506,16 @@ async function maybeCompact(
   systemPrompt: string,
   signal: AbortSignal,
 ): Promise<void> {
-  if (compacting) return;
+  if (compacting) { console.log("[OS][maybeCompact] already compacting, skipping"); return; }
 
   const budget = historyBudgetFor(cfg, systemPrompt, !!job.image);
-  if (sessionTokens(session) <= budget * COMPACTION_WATERMARK) return;
+  const tokens = sessionTokens(session);
+  const watermark = budget * COMPACTION_WATERMARK;
+  console.log(`[OS][maybeCompact] tokens=${tokens} budget=${budget} watermark=${watermark.toFixed(0)} needsCompaction=${tokens > watermark}`);
+  if (tokens <= watermark) return;
 
   const plan = planCompaction(session, Math.floor(budget * COMPACTION_TARGET));
+  console.log(`[OS][maybeCompact] plan: fold=${plan.fold.length} keep=${plan.keep.length}`);
   if (plan.fold.length === 0) return;
 
   compacting = true;
@@ -459,8 +526,14 @@ async function maybeCompact(
     text: "Summarizing earlier conversation…",
   });
   try {
+    console.log("[OS][maybeCompact] summarizing…");
     const summary = await summarize(session.summary, plan.fold, signal);
-    if (summary) applyCompaction(session, summary, plan.keep);
+    if (summary) {
+      console.log(`[OS][maybeCompact] summary produced (${summary.length} chars), applying compaction`);
+      applyCompaction(session, summary, plan.keep);
+    } else {
+      console.warn("[OS][maybeCompact] summarization returned null, keeping full turns");
+    }
     emitContextUsage(job.clientId, session, budget, "compacted");
   } finally {
     compacting = false;
@@ -470,38 +543,46 @@ async function maybeCompact(
 async function runChat(job: ChatJob): Promise<void> {
   const { clientId, reqId } = job;
   const cfg = MODES[job.mode] ?? MODES[DEFAULT_MODE];
+  console.log(`[OS][runChat] ── BEGIN ── reqId=${reqId} clientId=${clientId} mode=${job.mode} hasImage=${!!job.image} textLen=${job.text.length}`);
+  console.log(`[OS][runChat] text (first 300): "${job.text.slice(0, 300)}"`);
+  console.log(`[OS][runChat] cfg: maxTokens=${cfg.maxTokens} maxIterations=${cfg.maxIterations} thinking=${cfg.thinking}`);
   const controller = new AbortController();
   current = { clientId, reqId, controller };
   try {
     await ensureLoaded(clientId);
     if (state !== "ready" || !wllama) {
+      console.error(`[OS][runChat] model not ready: state="${state}" loadError="${loadError}"`);
       relay(clientId, { kind: "error", reqId, message: loadError || "Model not loaded" });
       return;
     }
 
     const session = getSession(clientId);
+    console.log(`[OS][runChat] session: turns=${session.turns.length} summaryLen=${session.summary.length} tokens=${sessionTokens(session)}`);
     appendTurn(session, "user", job.text);
 
     const systemPrompt = buildSystemPrompt(job.mode);
+    console.log(`[OS][runChat] systemPrompt length=${systemPrompt.length}`);
     await maybeCompact(session, cfg, job, systemPrompt, controller.signal);
 
     relay(clientId, {
       kind: "status",
       reqId,
-      text: job.image ? "Reading the slide…" : "Thinking…",
+      text: job.image ? "Analysing the page…" : "Thinking…",
     });
 
-    let result = await generate(
-      job,
-      cfg,
-      assembleMessages(session, systemPrompt, job.image),
-      controller.signal,
-    );
+    const messages = assembleMessages(session, systemPrompt, job.image);
+    console.log(`[OS][runChat] assembled ${messages.length} messages for generation`);
+    let result = await generate(job, cfg, messages, controller.signal);
+    console.log(`[OS][runChat] generation done: aborted=${result.aborted} textLen=${result.text.length}`);
 
     // Verify→correct loop (Forge). Bounded by cfg.maxIterations and Stop.
     for (let pass = 1; pass < cfg.maxIterations && !result.aborted; pass++) {
+      console.log(`[OS][runChat] verify pass ${pass}…`);
       const verdict = await verify(job, result.text);
-      if (verdict.accepted || controller.signal.aborted) break;
+      if (verdict.accepted || controller.signal.aborted) {
+        console.log(`[OS][runChat] verify pass ${pass}: accepted=${verdict.accepted}`);
+        break;
+      }
       relay(clientId, { kind: "status", reqId, text: `Refining (pass ${pass + 1})…` });
       const refine = assembleMessages(session, systemPrompt, job.image);
       refine.push({ role: "assistant", content: result.text });
@@ -509,15 +590,13 @@ async function runChat(job: ChatJob): Promise<void> {
       result = await generate(job, cfg, refine, controller.signal);
     }
 
-    // Record what the user actually saw (partial answers included) so the next
-    // turn has correct context.
     if (result.text) appendTurn(session, "assistant", result.text);
 
-    // Report updated context usage after the turn lands.
     const budget = historyBudgetFor(cfg, systemPrompt, !!job.image);
     emitContextUsage(clientId, session, budget, "ok");
 
     const text = result.text || (result.aborted ? "(stopped)" : "(no answer)");
+    console.log(`[OS][runChat] ── END ── reqId=${reqId} finalTextLen=${text.length}`);
     relay(clientId, { kind: "done", reqId, text });
   } catch (err) {
     // A wasm RuntimeError / "(ABORT)" is a native crash — almost always the
@@ -537,23 +616,80 @@ async function runChat(job: ChatJob): Promise<void> {
   }
 }
 
+// ── Agent step ────────────────────────────────────────────────────────────────
+//
+// A single, stateless decision in the browser-agent loop. The orchestrator (side
+// panel) owns the agent's working memory and passes a fully-built system + user
+// prompt plus the current screenshot; we just generate the model's next-action
+// JSON and stream it back. Crucially this never touches a Session, so the agent's
+// many intermediate reasoning steps don't pollute conversational memory.
+async function runAgentStep(job: AgentStepJob): Promise<void> {
+  const { clientId, reqId } = job;
+  const cfg = MODES[job.mode] ?? MODES[DEFAULT_MODE];
+  console.log(`[OS][runAgentStep] ── BEGIN ── reqId=${reqId} clientId=${clientId} mode=${job.mode} hasImage=${!!job.image}`);
+  console.log(`[OS][runAgentStep] system (${job.system.length} chars): "${job.system.slice(0, 200)}…"`);
+  console.log(`[OS][runAgentStep] user (${job.user.length} chars): "${job.user.slice(0, 300)}…"`);
+  const controller = new AbortController();
+  current = { clientId, reqId, controller };
+  try {
+    await ensureLoaded(clientId);
+    if (state !== "ready" || !wllama) {
+      console.error(`[OS][runAgentStep] model not ready: state="${state}"`);
+      relay(clientId, { kind: "error", reqId, message: loadError || "Model not loaded" });
+      return;
+    }
+
+    const userContent: ChatCompletionMessage["content"] = job.image
+      ? [
+          { type: "image", data: dataUrlToArrayBuffer(job.image) },
+          { type: "text", text: job.user },
+        ]
+      : job.user;
+
+    const messages: ChatCompletionMessage[] = [
+      { role: "system", content: job.system },
+      { role: "user", content: userContent },
+    ];
+
+    console.log(`[OS][runAgentStep] generating with ${messages.length} messages…`);
+    const result = await generate(job, cfg, messages, controller.signal);
+    const text = result.text || (result.aborted ? "(stopped)" : "");
+    console.log(`[OS][runAgentStep] ── END ── reqId=${reqId} aborted=${result.aborted} textLen=${text.length} text="${text.slice(0, 200)}"`);
+    relay(clientId, { kind: "done", reqId, text });
+  } catch (err) {
+    const raw = err instanceof Error ? err.message : String(err);
+    const fatal = (err instanceof Error && err.name === "RuntimeError") || raw.includes("(ABORT)");
+    relay(clientId, {
+      kind: "error",
+      reqId,
+      message: fatal
+        ? "Ran out of memory reading the page. Try Focus or Flash mode."
+        : raw,
+    });
+  } finally {
+    if (current?.reqId === reqId) current = undefined;
+  }
+}
+
 // ── Message handling ──────────────────────────────────────────────────────────
 
 chrome.runtime.onMessage.addListener((msg: ToOffscreen | { to?: string }) => {
   if (!msg || (msg as { to?: string }).to !== "offscreen") return;
   const m = msg as ToOffscreen;
+  console.log(`[OS][onMessage] cmd="${m.cmd}" clientId=${m.clientId}`, m.cmd === "chat" ? `reqId=${(m as ChatJob).reqId} mode=${(m as ChatJob).mode}` : m.cmd === "agentStep" ? `reqId=${(m as AgentStepJob).reqId}` : "");
   switch (m.cmd) {
     case "load":
-      // An explicit size on load selects the context window before first load,
-      // or reloads if it differs from what's already loaded.
       if (isContextTokens(m.nCtx)) {
+        console.log(`[OS][onMessage] load with nCtx=${m.nCtx}`);
         void setContextSize(m.clientId, m.nCtx);
       } else {
+        console.log(`[OS][onMessage] load (default ctx)`);
         void ensureLoaded(m.clientId);
       }
       break;
     case "chat":
       enqueue({
+        kind: "chat",
         clientId: m.clientId,
         reqId: m.reqId,
         text: m.text,
@@ -561,22 +697,39 @@ chrome.runtime.onMessage.addListener((msg: ToOffscreen | { to?: string }) => {
         image: m.image,
       });
       break;
+    case "agentStep":
+      enqueue({
+        kind: "agentStep",
+        clientId: m.clientId,
+        reqId: m.reqId,
+        system: m.system,
+        user: m.user,
+        mode: m.mode,
+        image: m.image,
+      });
+      break;
     case "reset":
-      // New chat: forget this tab's conversation context.
+      console.log(`[OS][onMessage] reset — clearing session for clientId=${m.clientId}`);
       sessions.delete(m.clientId);
       break;
+    case "injectContext": {
+      console.log(`[OS][onMessage] injectContext clientId=${m.clientId} userText=${m.userText?.length ?? 0} chars, assistantText=${m.assistantText?.length ?? 0} chars`);
+      const s = getSession(m.clientId);
+      if (m.userText) appendTurn(s, "user", m.userText);
+      if (m.assistantText) appendTurn(s, "assistant", m.assistantText);
+      break;
+    }
     case "abort":
-      // Stop this client's in-flight generation if it's the one named…
+      console.log(`[OS][onMessage] abort reqId=${m.reqId} — current=${current?.reqId} match=${current?.reqId === m.reqId}`);
       if (current && current.clientId === m.clientId && current.reqId === m.reqId) {
         current.controller.abort();
       }
-      // …and drop any of its still-queued jobs.
       for (let i = jobs.length - 1; i >= 0; i--) {
         if (jobs[i].clientId === m.clientId) jobs.splice(i, 1);
       }
       break;
     case "disconnect":
-      // Tab closed: abort its in-flight job, drop its queued ones, free its session.
+      console.log(`[OS][onMessage] disconnect clientId=${m.clientId}`);
       if (current && current.clientId === m.clientId) current.controller.abort();
       for (let i = jobs.length - 1; i >= 0; i--) {
         if (jobs[i].clientId === m.clientId) jobs.splice(i, 1);

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Qwen Chat",
-  "version": "0.0.1",
-  "description": "Local Qwen3.5 (vision + text) chat assistant — runs in your browser via wllama",
+  "name": "Show Pilot",
+  "version": "0.2.0",
+  "description": "Show Pilot — AI presentation assistant powered by local Qwen3.5 (vision + text) via wllama",
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; worker-src 'self'; default-src 'self' data: blob:; connect-src 'self' data: blob: https://huggingface.co https://*.huggingface.co https://*.hf.co https://*.xethub.hf.co https://raw.githubusercontent.com"
   },
@@ -11,7 +11,22 @@
     "type": "module"
   },
   "action": {
-    "default_title": "Qwen Chat"
+    "default_title": "Show Pilot",
+    "default_icon": {
+      "16": "logo.png",
+      "32": "logo.png",
+      "48": "logo.png",
+      "128": "logo.png"
+    }
+  },
+  "icons": {
+    "16": "logo.png",
+    "32": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
   },
   "content_scripts": [
     {
@@ -28,7 +43,7 @@
       "run_at": "document_idle"
     }
   ],
-  "permissions": ["storage", "unlimitedStorage", "scripting", "activeTab", "offscreen"],
+  "permissions": ["storage", "unlimitedStorage", "scripting", "activeTab", "tabs", "offscreen", "sidePanel", "debugger"],
   "host_permissions": ["<all_urls>"],
   "web_accessible_resources": [
     {

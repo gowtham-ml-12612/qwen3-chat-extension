@@ -1,0 +1,3418 @@
+[
+    {
+        "themeInfo": {
+            "theme": {
+                "name": "Geometric",
+                "fontScheme": {
+                    "id": "44552226-DFF1-4FCC-96EB-FD004E4F7BE9",
+                    "name": "Geometric",
+                    "latin": [
+                        {
+                            "fontFamily": {
+                                "name": "Dosis"
+                            }
+                        },
+                        {
+                            "fontFamily": {
+                                "name": "Metrophobic"
+                            }
+                        }
+                    ]
+                },
+                "colorScheme": {
+                    "id": "7DAB6C49-CC6C-4C05-8684-D4D0958C5976",
+                    "name": "Geometric",
+                    "colorStyle": {
+                        "dark1": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "light1": [
+                            255,
+                            255,
+                            255
+                        ],
+                        "dark2": [
+                            46,
+                            23,
+                            47
+                        ],
+                        "light2": [
+                            95,
+                            55,
+                            152
+                        ],
+                        "accent1": [
+                            74,
+                            81,
+                            189
+                        ],
+                        "accent2": [
+                            194,
+                            32,
+                            197
+                        ],
+                        "accent3": [
+                            255,
+                            203,
+                            89
+                        ],
+                        "accent4": [
+                            255,
+                            73,
+                            91
+                        ],
+                        "accent5": [
+                            64,
+                            174,
+                            185
+                        ],
+                        "accent6": [
+                            63,
+                            208,
+                            58
+                        ],
+                        "hlink": [
+                            194,
+                            32,
+                            197
+                        ],
+                        "followhlink": [
+                            150,
+                            112,
+                            212
+                        ]
+                    }
+                },
+                "bgFillScheme": {
+                    "id": "380a9ef9-e12e-4d7b-8ee0-4d580bc72d3f",
+                    "name": "Geometric",
+                    "fill": [
+                        {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "HOLDER"
+                                }
+                            }
+                        },
+                        {
+                            "type": "PICT",
+                            "pict": {
+                                "value": {
+                                    "id": "ea448fa7-1aec-4d27-80b4-d0c1b6c7c5e9",
+                                    "type": "USERDEFINED"
+                                },
+                                "props": {
+                                    "colorMode": {
+                                        "mode": "DUOTONE",
+                                        "duotone": [
+                                            {
+                                                "type": "HOLDER",
+                                                "tweaks": {
+                                                    "shade": 0.1,
+                                                    "hsl": {
+                                                        "saturation": [
+                                                            {
+                                                                "mode": "MODIFY",
+                                                                "value": 4
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "HOLDER",
+                                                "tweaks": {
+                                                    "tint": 0.9,
+                                                    "hsl": {
+                                                        "saturation": [
+                                                            {
+                                                                "mode": "MODIFY",
+                                                                "value": 2
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "type": {
+                                    "type": "TILE",
+                                    "tile": {
+                                        "offsetX": 0,
+                                        "offsetY": 0,
+                                        "scale": {
+                                            "x": 1,
+                                            "y": 1
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "type": "GRADIENT",
+                            "gradient": {
+                                "type": "RADIAL",
+                                "stops": [
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "tint": 0.8,
+                                                "hsl": {
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 3
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "shade": 0.6,
+                                                "hsl": {
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 2
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 1
+                                    }
+                                ],
+                                "radial": {
+                                    "fillToRect": {
+                                        "left": 0.5,
+                                        "top": 0.5,
+                                        "right": 0.5,
+                                        "bottom": 0.5
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                "fillScheme": {
+                    "id": "1479bd9b-c5e1-47af-b8fe-3f5f119da5c7",
+                    "name": "Geometric",
+                    "fill": [
+                        {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "HOLDER"
+                                }
+                            }
+                        },
+                        {
+                            "type": "GRADIENT",
+                            "gradient": {
+                                "type": "LINEAR",
+                                "rotate": 270,
+                                "stops": [
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "tint": 0.5,
+                                                "hsl": {
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 3
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "tint": 0.37,
+                                                "hsl": {
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 3
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0.35
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "tint": 0.15,
+                                                "hsl": {
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 3.5
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 1
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "GRADIENT",
+                            "gradient": {
+                                "type": "LINEAR",
+                                "rotate": 270,
+                                "stops": [
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "shade": 0.51,
+                                                "hsl": {
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.3
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "shade": 0.93,
+                                                "hsl": {
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.3
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0.8
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "shade": 0.94,
+                                                "hsl": {
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.35
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 1
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "strokeScheme": {
+                    "id": "f5e062d8-1e6f-441d-8b63-603e2ea04ef2",
+                    "name": "Geometric",
+                    "stroke": [
+                        {
+                            "type": "SOLID",
+                            "width": 2,
+                            "jointype": "ROUND",
+                            "fill": {
+                                "type": "NONE",
+                                "solid": {
+                                    "color": {
+                                        "type": "A1",
+                                        "tweaks": {
+                                            "shade": 0.95,
+                                            "hsl": {
+                                                "luminance": [
+                                                    {
+                                                        "mode": "MODIFY",
+                                                        "value": 0.75
+                                                    }
+                                                ],
+                                                "saturation": [
+                                                    {
+                                                        "mode": "MODIFY",
+                                                        "value": 1.05
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "captype": "FLAT"
+                        },
+                        {
+                            "type": "SOLID",
+                            "width": 2.6666667,
+                            "fill": {
+                                "type": "SOLID",
+                                "solid": {
+                                    "color": {
+                                        "type": "HOLDER"
+                                    }
+                                }
+                            },
+                            "captype": "FLAT"
+                        },
+                        {
+                            "type": "SOLID",
+                            "width": 4,
+                            "fill": {
+                                "type": "SOLID",
+                                "solid": {
+                                    "color": {
+                                        "type": "HOLDER"
+                                    }
+                                }
+                            },
+                            "captype": "FLAT"
+                        }
+                    ]
+                },
+                "themeId": "8114000000822480"
+            },
+            "defaultValues": {
+                "bg": 0,
+                "fill": 0,
+                "stroke": 0,
+                "colorMap": {
+                    "bg1": "LIGHT1",
+                    "tx1": "DARK1",
+                    "bg2": "LIGHT2",
+                    "tx2": "DARK2",
+                    "a1": "ACCENT1",
+                    "a2": "ACCENT2",
+                    "a3": "ACCENT3",
+                    "a4": "ACCENT4",
+                    "a5": "ACCENT5",
+                    "a6": "ACCENT6",
+                    "hlink": "HLINK",
+                    "followhlink": "FOLLOWHLINK"
+                },
+                "shape": {
+                    "themeRef": {
+                        "fillRef": {
+                            "ref": "THEME",
+                            "color": {
+                                "type": "A1"
+                            }
+                        }
+                    }
+                },
+                "line": {
+                    "props": {
+                        "stroke": {
+                            "type": "SOLID",
+                            "width": 2,
+                            "jointype": "ROUND",
+                            "fill": {
+                                "type": "SOLID",
+                                "solid": {
+                                    "color": {
+                                        "type": "A1",
+                                        "tweaks": {
+                                            "hsl": {
+                                                "luminance": [
+                                                    {
+                                                        "mode": "MODIFY",
+                                                        "value": 0.75
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "captype": "FLAT"
+                        }
+                    }
+                }
+            }
+        },
+        "slide": {
+            "data": {
+                "id": "f1594fbc-6c95-4dfe-8d60-361603d041a9",
+                "name": "slideMaster1",
+                "type": "MASTER",
+                "spellCheckProcessed": true
+            },
+            "shapes": [
+                {
+                    "type": "SHAPE",
+                    "shape": {
+                        "nvOProps": {
+                            "nvDProps": {
+                                "id": "91b9a8ac-a3d3-49e8-92f0-6e6bb8c96b01",
+                                "name": "Title Placeholder 1"
+                            },
+                            "nvODProps": {
+                                "locks": {
+                                    "noGroup": true
+                                }
+                            },
+                            "nvProps": {
+                                "placeHolder": {
+                                    "type": "TITLE"
+                                }
+                            }
+                        },
+                        "props": {
+                            "transform": {
+                                "rotate": 0,
+                                "dim": {
+                                    "width": 764.4,
+                                    "height": 63.25316
+                                },
+                                "pos": {
+                                    "left": 97.8,
+                                    "top": 44.645145,
+                                    "zindex": 4
+                                }
+                            },
+                            "geom": {
+                                "type": "PRESET",
+                                "preset": {
+                                    "type": "RECT"
+                                }
+                            }
+                        },
+                        "textBody": {
+                            "props": {
+                                "valign": "BOTTOM",
+                                "inset": {
+                                    "left": 9.6,
+                                    "top": 4.8,
+                                    "right": 9.6,
+                                    "bottom": 4.8
+                                },
+                                "autoFit": {
+                                    "type": "NONE"
+                                }
+                            },
+                            "paras": [
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Click to edit Master title style"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "edit": {
+                            "htmlbox": true
+                        }
+                    }
+                },
+                {
+                    "type": "SHAPE",
+                    "shape": {
+                        "nvOProps": {
+                            "nvDProps": {
+                                "id": "718d9ac1-6dad-49b3-96c5-de2504cc2a3b",
+                                "name": "Text Placeholder 2"
+                            },
+                            "nvODProps": {
+                                "locks": {
+                                    "noGroup": true
+                                }
+                            },
+                            "nvProps": {
+                                "placeHolder": {
+                                    "type": "TXTBODY"
+                                }
+                            }
+                        },
+                        "props": {
+                            "transform": {
+                                "rotate": 0,
+                                "dim": {
+                                    "width": 764.4,
+                                    "height": 350.3685
+                                },
+                                "pos": {
+                                    "left": 97.8,
+                                    "top": 127.32825,
+                                    "zindex": 5
+                                }
+                            },
+                            "geom": {
+                                "type": "PRESET",
+                                "preset": {
+                                    "type": "RECT"
+                                }
+                            }
+                        },
+                        "textBody": {
+                            "props": {
+                                "inset": {
+                                    "left": 9.6,
+                                    "top": 9.826772,
+                                    "right": 9.6,
+                                    "bottom": 4.8
+                                },
+                                "autoFit": {
+                                    "type": "NORMAL",
+                                    "normal": {}
+                                }
+                            },
+                            "paras": [
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Click to edit Master text styles"
+                                        }
+                                    ],
+                                    "style": {
+                                        "level": 1
+                                    }
+                                },
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Second level"
+                                        }
+                                    ],
+                                    "style": {
+                                        "level": 2
+                                    }
+                                },
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Third level"
+                                        }
+                                    ],
+                                    "style": {
+                                        "level": 3
+                                    }
+                                },
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Fourth level"
+                                        }
+                                    ],
+                                    "style": {
+                                        "level": 4
+                                    }
+                                },
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Fifth level"
+                                        }
+                                    ],
+                                    "style": {
+                                        "level": 5
+                                    }
+                                }
+                            ]
+                        },
+                        "edit": {
+                            "htmlbox": true
+                        }
+                    }
+                },
+                {
+                    "type": "SHAPE",
+                    "shape": {
+                        "nvOProps": {
+                            "nvDProps": {
+                                "id": "a95687ce-86f4-4f32-8632-448245b3275a",
+                                "name": "Slide Number Placeholder 5"
+                            },
+                            "nvODProps": {
+                                "locks": {
+                                    "noGroup": true
+                                }
+                            },
+                            "nvProps": {
+                                "placeHolder": {
+                                    "type": "SLIDENUM"
+                                }
+                            }
+                        },
+                        "props": {
+                            "transform": {
+                                "rotate": 0,
+                                "dim": {
+                                    "width": 224,
+                                    "height": 28.750027
+                                },
+                                "pos": {
+                                    "left": 642.8817,
+                                    "top": 500.91687,
+                                    "zindex": 3
+                                }
+                            },
+                            "geom": {
+                                "type": "PRESET",
+                                "preset": {
+                                    "type": "RECT"
+                                }
+                            }
+                        },
+                        "textBody": {
+                            "props": {
+                                "valign": "MIDDLE",
+                                "inset": {
+                                    "left": 9.6,
+                                    "top": 4.8,
+                                    "right": 9.6,
+                                    "bottom": 4.8
+                                }
+                            },
+                            "listStyles": [
+                                {
+                                    "halign": "RIGHT",
+                                    "level": 1,
+                                    "defPrProps": {
+                                        "font": {
+                                            "ref": "MINOR"
+                                        },
+                                        "fill": {
+                                            "type": "SOLID",
+                                            "solid": {
+                                                "color": {
+                                                    "type": "BG1",
+                                                    "tweaks": {
+                                                        "hsl": {
+                                                            "luminance": [
+                                                                {
+                                                                    "mode": "MODIFY",
+                                                                    "value": 0.65
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "size": 6,
+                                        "italic": false,
+                                        "fontweight": "NORMAL"
+                                    }
+                                }
+                            ],
+                            "paras": [
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "<#>"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "edit": {
+                            "htmlbox": true
+                        }
+                    }
+                },
+                {
+                    "type": "SHAPE",
+                    "shape": {
+                        "nvOProps": {
+                            "nvDProps": {
+                                "id": "991ed34e-9e7d-4b01-aa0f-8ecaa4673f35",
+                                "name": "Footer Placeholder 4"
+                            },
+                            "nvODProps": {
+                                "locks": {
+                                    "noGroup": true
+                                }
+                            },
+                            "nvProps": {
+                                "placeHolder": {
+                                    "type": "FOOTER"
+                                }
+                            }
+                        },
+                        "props": {
+                            "transform": {
+                                "rotate": 0,
+                                "dim": {
+                                    "width": 304,
+                                    "height": 28.750027
+                                },
+                                "pos": {
+                                    "left": 328,
+                                    "top": 500.91687,
+                                    "zindex": 2
+                                }
+                            },
+                            "geom": {
+                                "type": "PRESET",
+                                "preset": {
+                                    "type": "RECT"
+                                }
+                            }
+                        },
+                        "textBody": {
+                            "props": {
+                                "valign": "MIDDLE",
+                                "inset": {
+                                    "left": 9.6,
+                                    "top": 4.8,
+                                    "right": 9.6,
+                                    "bottom": 4.8
+                                }
+                            },
+                            "listStyles": [
+                                {
+                                    "halign": "CENTER",
+                                    "level": 1,
+                                    "defPrProps": {
+                                        "font": {
+                                            "ref": "MINOR"
+                                        },
+                                        "fill": {
+                                            "type": "SOLID",
+                                            "solid": {
+                                                "color": {
+                                                    "type": "BG1",
+                                                    "tweaks": {
+                                                        "hsl": {
+                                                            "luminance": [
+                                                                {
+                                                                    "mode": "MODIFY",
+                                                                    "value": 0.65
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "size": 6,
+                                        "italic": false,
+                                        "fontweight": "NORMAL"
+                                    }
+                                }
+                            ],
+                            "paras": [
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Footer"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "edit": {
+                            "htmlbox": true
+                        }
+                    }
+                },
+                {
+                    "type": "SHAPE",
+                    "shape": {
+                        "nvOProps": {
+                            "nvDProps": {
+                                "id": "18d3ead5-bbb1-45bb-b2da-dfc511c4d497",
+                                "name": "Date Placeholder 3"
+                            },
+                            "nvODProps": {
+                                "locks": {
+                                    "noGroup": true
+                                }
+                            },
+                            "nvProps": {
+                                "placeHolder": {
+                                    "type": "DATETIME"
+                                }
+                            }
+                        },
+                        "props": {
+                            "transform": {
+                                "rotate": 0,
+                                "dim": {
+                                    "width": 224,
+                                    "height": 28.750027
+                                },
+                                "pos": {
+                                    "left": 93.92472,
+                                    "top": 500.91687,
+                                    "zindex": 1
+                                }
+                            },
+                            "geom": {
+                                "type": "PRESET",
+                                "preset": {
+                                    "type": "RECT"
+                                }
+                            }
+                        },
+                        "textBody": {
+                            "props": {
+                                "valign": "MIDDLE",
+                                "inset": {
+                                    "left": 9.6,
+                                    "top": 4.8,
+                                    "right": 9.6,
+                                    "bottom": 4.8
+                                }
+                            },
+                            "listStyles": [
+                                {
+                                    "halign": "LEFT",
+                                    "level": 1,
+                                    "defPrProps": {
+                                        "font": {
+                                            "ref": "MINOR"
+                                        },
+                                        "fill": {
+                                            "type": "SOLID",
+                                            "solid": {
+                                                "color": {
+                                                    "type": "BG1",
+                                                    "tweaks": {
+                                                        "hsl": {
+                                                            "luminance": [
+                                                                {
+                                                                    "mode": "MODIFY",
+                                                                    "value": 0.65
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "size": 6,
+                                        "italic": false,
+                                        "fontweight": "NORMAL"
+                                    }
+                                }
+                            ],
+                            "paras": [
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Date"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "edit": {
+                            "htmlbox": true
+                        }
+                    }
+                }
+            ],
+            "bg": {
+                "fill": {
+                    "type": "PICT",
+                    "solid": {
+                        "color": {
+                            "type": "BG1"
+                        }
+                    },
+                    "gradient": {
+                        "type": "LINEAR",
+                        "rotate": 324,
+                        "stops": [
+                            {
+                                "color": {
+                                    "type": "CUSTOM",
+                                    "rgb": [
+                                        77,
+                                        46,
+                                        103
+                                    ]
+                                },
+                                "position": 0
+                            },
+                            {
+                                "color": {
+                                    "type": "CUSTOM",
+                                    "rgb": [
+                                        86,
+                                        56,
+                                        147
+                                    ]
+                                },
+                                "position": 0.46696034
+                            },
+                            {
+                                "color": {
+                                    "type": "CUSTOM",
+                                    "rgb": [
+                                        85,
+                                        17,
+                                        119
+                                    ]
+                                },
+                                "position": 1
+                            }
+                        ]
+                    },
+                    "pict": {
+                        "value": {
+                            "id": "7832FF65-C2FC-417C-A055-74ACC2832D97",
+                            "type": "USERDEFINED",
+                            "pictureName": "diamond-34548000003087437.jpg"
+                        },
+                        "type": {
+                            "type": "FRAME",
+                            "frame": {
+                                "left": 0,
+                                "top": 0,
+                                "right": 0,
+                                "bottom": 0
+                            }
+                        }
+                    }
+                }
+            },
+            "hf": {
+                "footer": false,
+                "slidenum": false,
+                "datetime": false
+            }
+        },
+        "textStyle": {
+            "titleStyles": [
+                {
+                    "halign": "LEFT",
+                    "level": 1,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "NONE"
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 1
+                        },
+                        "before": {
+                            "type": "PERCENT",
+                            "percent": 0
+                        }
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MAJOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "BG1"
+                                }
+                            }
+                        },
+                        "size": 32,
+                        "bold": true,
+                        "italic": false,
+                        "fontweight": "MEDIUM"
+                    }
+                }
+            ],
+            "txtbodyStyles": [
+                {
+                    "halign": "LEFT",
+                    "level": 1,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "10023"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Source Sans Pro"
+                            }
+                        },
+                        "color": {
+                            "type": "BG1",
+                            "tweaks": {
+                                "hsl": {
+                                    "luminance": [
+                                        {
+                                            "mode": "MODIFY",
+                                            "value": 0.75
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 16
+                        }
+                    },
+                    "margin": {
+                        "left": 36
+                    },
+                    "indent": -36,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "BG1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "italic": false,
+                        "fontweight": "NORMAL"
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 2,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "10023"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Source Sans Pro"
+                            }
+                        },
+                        "color": {
+                            "type": "BG1",
+                            "tweaks": {
+                                "hsl": {
+                                    "luminance": [
+                                        {
+                                            "mode": "MODIFY",
+                                            "value": 0.75
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 4
+                        }
+                    },
+                    "margin": {
+                        "left": 78
+                    },
+                    "indent": -30,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "BG1"
+                                }
+                            }
+                        },
+                        "size": 16,
+                        "italic": false,
+                        "fontweight": "NORMAL"
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 3,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "10023"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Source Sans Pro"
+                            }
+                        },
+                        "color": {
+                            "type": "BG1",
+                            "tweaks": {
+                                "hsl": {
+                                    "luminance": [
+                                        {
+                                            "mode": "MODIFY",
+                                            "value": 0.75
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 4
+                        }
+                    },
+                    "margin": {
+                        "left": 120
+                    },
+                    "indent": -24,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "BG1"
+                                }
+                            }
+                        },
+                        "size": 14,
+                        "italic": false,
+                        "fontweight": "NORMAL"
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 4,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "10023"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Source Sans Pro"
+                            }
+                        },
+                        "color": {
+                            "type": "BG1",
+                            "tweaks": {
+                                "hsl": {
+                                    "luminance": [
+                                        {
+                                            "mode": "MODIFY",
+                                            "value": 0.75
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 4
+                        }
+                    },
+                    "margin": {
+                        "left": 168
+                    },
+                    "indent": -24,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "BG1"
+                                }
+                            }
+                        },
+                        "size": 12,
+                        "italic": false,
+                        "fontweight": "NORMAL"
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 5,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "10023"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Source Sans Pro"
+                            }
+                        },
+                        "color": {
+                            "type": "BG1",
+                            "tweaks": {
+                                "hsl": {
+                                    "luminance": [
+                                        {
+                                            "mode": "MODIFY",
+                                            "value": 0.75
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 4
+                        }
+                    },
+                    "margin": {
+                        "left": 216
+                    },
+                    "indent": -24,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "BG1"
+                                }
+                            }
+                        },
+                        "size": 11,
+                        "italic": false,
+                        "fontweight": "NORMAL"
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 6,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "45"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "before": {
+                            "type": "PERCENT",
+                            "percent": 0.2
+                        }
+                    },
+                    "margin": {
+                        "left": 264
+                    },
+                    "indent": -24,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "BG1"
+                                }
+                            }
+                        },
+                        "size": 11,
+                        "italic": false,
+                        "fontweight": "NORMAL"
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 7,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "45"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "before": {
+                            "type": "PERCENT",
+                            "percent": 0.2
+                        }
+                    },
+                    "margin": {
+                        "left": 312
+                    },
+                    "indent": -24,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "BG1"
+                                }
+                            }
+                        },
+                        "size": 11,
+                        "italic": false,
+                        "fontweight": "NORMAL"
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 8,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "45"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "before": {
+                            "type": "PERCENT",
+                            "percent": 0.2
+                        }
+                    },
+                    "margin": {
+                        "left": 360
+                    },
+                    "indent": -24,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "BG1"
+                                }
+                            }
+                        },
+                        "size": 11,
+                        "italic": false,
+                        "fontweight": "NORMAL"
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 9,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "45"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "before": {
+                            "type": "PERCENT",
+                            "percent": 0.2
+                        }
+                    },
+                    "margin": {
+                        "left": 408
+                    },
+                    "indent": -24,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "BG1"
+                                }
+                            }
+                        },
+                        "size": 11,
+                        "italic": false,
+                        "fontweight": "NORMAL"
+                    }
+                }
+            ],
+            "otherStyles": [
+                {
+                    "halign": "LEFT",
+                    "level": 1,
+                    "margin": {
+                        "left": 0
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 2,
+                    "margin": {
+                        "left": 48
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 3,
+                    "margin": {
+                        "left": 96
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 4,
+                    "margin": {
+                        "left": 144
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 5,
+                    "margin": {
+                        "left": 192
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 6,
+                    "margin": {
+                        "left": 240
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 7,
+                    "margin": {
+                        "left": 288
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 8,
+                    "margin": {
+                        "left": 336
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 9,
+                    "margin": {
+                        "left": 384
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "themeInfo": {
+            "theme": {
+                "name": "B&D-Powerpoint Template_16x9",
+                "fontScheme": {
+                    "id": "0b116c01-f533-4428-8ef3-fd5dbd9a1cd8",
+                    "name": "Montserrat_OpenSans",
+                    "latin": [
+                        {
+                            "fontFamily": {
+                                "name": "Montserrat-Bold"
+                            }
+                        },
+                        {
+                            "fontFamily": {
+                                "name": "Open Sans"
+                            }
+                        }
+                    ],
+                    "modified": true,
+                    "themeId": "47422000000017528"
+                },
+                "colorScheme": {
+                    "id": "e65bbd4e-b797-4395-9807-19723106d0e6",
+                    "name": "Passangers",
+                    "colorStyle": {
+                        "dark1": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "light1": [
+                            255,
+                            255,
+                            255
+                        ],
+                        "dark2": [
+                            4,
+                            32,
+                            172
+                        ],
+                        "light2": [
+                            234,
+                            234,
+                            234
+                        ],
+                        "accent1": [
+                            29,
+                            70,
+                            243
+                        ],
+                        "accent2": [
+                            255,
+                            87,
+                            87
+                        ],
+                        "accent3": [
+                            201,
+                            210,
+                            253
+                        ],
+                        "accent4": [
+                            94,
+                            120,
+                            250
+                        ],
+                        "accent5": [
+                            4,
+                            32,
+                            171
+                        ],
+                        "accent6": [
+                            2,
+                            21,
+                            114
+                        ],
+                        "hlink": [
+                            255,
+                            87,
+                            87
+                        ],
+                        "followhlink": [
+                            191,
+                            191,
+                            191
+                        ]
+                    },
+                    "modified": true,
+                    "themeId": "47422000000017528"
+                },
+                "bgFillScheme": {
+                    "id": "d32a2fdc-448f-41b9-b11e-56b4f729d550",
+                    "name": "Стандартная",
+                    "fill": [
+                        {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "HOLDER"
+                                }
+                            }
+                        },
+                        {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "HOLDER",
+                                    "tweaks": {
+                                        "tint": 0.95,
+                                        "hsl": {
+                                            "saturation": [
+                                                {
+                                                    "mode": "MODIFY",
+                                                    "value": 1.7
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "type": "GRADIENT",
+                            "gradient": {
+                                "type": "LINEAR",
+                                "rotate": 90,
+                                "stops": [
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "shade": 0.98,
+                                                "tint": 0.93,
+                                                "hsl": {
+                                                    "luminance": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.02
+                                                        }
+                                                    ],
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.5
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "shade": 0.9,
+                                                "tint": 0.98,
+                                                "hsl": {
+                                                    "luminance": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.03
+                                                        }
+                                                    ],
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.3
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0.5
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "shade": 0.63,
+                                                "hsl": {
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.2
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 1
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "modified": true,
+                    "themeId": "47422000000017528"
+                },
+                "fillScheme": {
+                    "id": "e909ee32-e0f5-4a9c-adc3-a6a295c6ffaa",
+                    "name": "Стандартная",
+                    "fill": [
+                        {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "HOLDER"
+                                }
+                            }
+                        },
+                        {
+                            "type": "GRADIENT",
+                            "gradient": {
+                                "type": "LINEAR",
+                                "rotate": 90,
+                                "stops": [
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "tint": 0.67,
+                                                "hsl": {
+                                                    "luminance": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.1
+                                                        }
+                                                    ],
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.05
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "tint": 0.73,
+                                                "hsl": {
+                                                    "luminance": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.05
+                                                        }
+                                                    ],
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.03
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0.5
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "tint": 0.81,
+                                                "hsl": {
+                                                    "luminance": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.05
+                                                        }
+                                                    ],
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.09
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 1
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "GRADIENT",
+                            "gradient": {
+                                "type": "LINEAR",
+                                "rotate": 90,
+                                "stops": [
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "tint": 0.94,
+                                                "hsl": {
+                                                    "luminance": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.02
+                                                        }
+                                                    ],
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.03
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "shade": 1,
+                                                "hsl": {
+                                                    "luminance": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1
+                                                        }
+                                                    ],
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.1
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 0.5
+                                    },
+                                    {
+                                        "color": {
+                                            "type": "HOLDER",
+                                            "tweaks": {
+                                                "shade": 0.78,
+                                                "hsl": {
+                                                    "luminance": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 0.99
+                                                        }
+                                                    ],
+                                                    "saturation": [
+                                                        {
+                                                            "mode": "MODIFY",
+                                                            "value": 1.2
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "position": 1
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "modified": true,
+                    "themeId": "47422000000017528"
+                },
+                "strokeScheme": {
+                    "id": "8699c375-d01e-4692-8b9b-791e1ec5d74f",
+                    "name": "Стандартная",
+                    "stroke": [
+                        {
+                            "type": "SOLID",
+                            "width": 0.6666667,
+                            "jointype": "MITER",
+                            "fill": {
+                                "type": "SOLID",
+                                "solid": {
+                                    "color": {
+                                        "type": "HOLDER"
+                                    }
+                                }
+                            },
+                            "captype": "FLAT"
+                        },
+                        {
+                            "type": "SOLID",
+                            "width": 1.3333334,
+                            "jointype": "MITER",
+                            "fill": {
+                                "type": "SOLID",
+                                "solid": {
+                                    "color": {
+                                        "type": "HOLDER"
+                                    }
+                                }
+                            },
+                            "captype": "FLAT"
+                        },
+                        {
+                            "type": "SOLID",
+                            "width": 2,
+                            "jointype": "MITER",
+                            "fill": {
+                                "type": "SOLID",
+                                "solid": {
+                                    "color": {
+                                        "type": "HOLDER"
+                                    }
+                                }
+                            },
+                            "captype": "FLAT"
+                        }
+                    ],
+                    "modified": true,
+                    "themeId": "47422000000017528"
+                },
+                "themeId": "1231313000633331112"
+            },
+            "defaultValues": {
+                "bg": 0,
+                "fill": 0,
+                "stroke": 1,
+                "colorMap": {
+                    "bg1": "LIGHT1",
+                    "tx1": "DARK1",
+                    "bg2": "LIGHT2",
+                    "tx2": "DARK2",
+                    "a1": "ACCENT1",
+                    "a2": "ACCENT2",
+                    "a3": "ACCENT3",
+                    "a4": "ACCENT4",
+                    "a5": "ACCENT5",
+                    "a6": "ACCENT6",
+                    "hlink": "HLINK",
+                    "followhlink": "FOLLOWHLINK"
+                },
+                "shape": {
+                    "props": {
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "A1"
+                                }
+                            }
+                        },
+                        "stroke": {
+                            "fill": {
+                                "type": "NONE"
+                            }
+                        }
+                    },
+                    "themeRef": {
+                        "fillRef": {
+                            "ref": "THEMEINDEX",
+                            "color": {
+                                "type": "A1"
+                            },
+                            "index": 0
+                        },
+                        "strokeRef": {
+                            "ref": "THEMEINDEX",
+                            "color": {
+                                "type": "A1",
+                                "tweaks": {
+                                    "shade": 0.5
+                                }
+                            },
+                            "index": 1
+                        },
+                        "fontRef": {
+                            "ref": "MINOR",
+                            "color": {
+                                "type": "LT1"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "slide": {
+            "data": {
+                "id": "7E179416-0B32-4FAA-AAED-AE78FD7B4B86",
+                "name": "slideMaster1",
+                "type": "MASTER",
+                "spellCheckProcessed": true
+            },
+            "shapes": [
+                {
+                    "type": "SHAPE",
+                    "shape": {
+                        "nvOProps": {
+                            "nvDProps": {
+                                "id": "91b9a8ac-a3d3-49e8-92f0-6e6bb8c96b01",
+                                "name": "Заголовок 1"
+                            },
+                            "nvODProps": {
+                                "locks": {
+                                    "noGroup": true
+                                }
+                            },
+                            "nvProps": {
+                                "placeHolder": {
+                                    "type": "TITLE"
+                                }
+                            }
+                        },
+                        "props": {
+                            "transform": {
+                                "rotate": 0,
+                                "dim": {
+                                    "width": 345,
+                                    "height": 145.24054
+                                },
+                                "pos": {
+                                    "left": 135,
+                                    "top": 85.42615,
+                                    "zindex": 1
+                                }
+                            },
+                            "geom": {
+                                "type": "PRESET",
+                                "preset": {
+                                    "type": "RECT"
+                                }
+                            }
+                        },
+                        "textBody": {
+                            "props": {
+                                "valign": "TOP",
+                                "inset": {
+                                    "left": 0,
+                                    "top": 0,
+                                    "right": 0,
+                                    "bottom": 0
+                                },
+                                "autoFit": {
+                                    "type": "NONE"
+                                },
+                                "writingMode": "HORIZONTAL"
+                            },
+                            "paras": [
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "YOUR TITLE HERE"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "edit": {
+                            "htmlbox": true
+                        }
+                    }
+                },
+                {
+                    "type": "SHAPE",
+                    "shape": {
+                        "nvOProps": {
+                            "nvDProps": {
+                                "id": "718d9ac1-6dad-49b3-96c5-de2504cc2a3b",
+                                "name": "Текст 2"
+                            },
+                            "nvODProps": {
+                                "locks": {
+                                    "noGroup": true
+                                }
+                            },
+                            "nvProps": {
+                                "placeHolder": {
+                                    "type": "TXTBODY"
+                                }
+                            }
+                        },
+                        "props": {
+                            "transform": {
+                                "rotate": 0,
+                                "dim": {
+                                    "width": 690,
+                                    "height": 171
+                                },
+                                "pos": {
+                                    "left": 135,
+                                    "top": 270,
+                                    "zindex": 2
+                                }
+                            },
+                            "geom": {
+                                "type": "PRESET",
+                                "preset": {
+                                    "type": "RECT"
+                                }
+                            }
+                        },
+                        "textBody": {
+                            "props": {
+                                "inset": {
+                                    "left": 0,
+                                    "top": 0,
+                                    "right": 0,
+                                    "bottom": 0
+                                },
+                                "autoFit": {
+                                    "type": "NONE"
+                                },
+                                "writingMode": "HORIZONTAL"
+                            },
+                            "paras": [
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Write here subtitle"
+                                        }
+                                    ],
+                                    "style": {
+                                        "level": 1
+                                    }
+                                },
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Write here subtitle"
+                                        }
+                                    ],
+                                    "style": {
+                                        "level": 2
+                                    }
+                                },
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Write here text"
+                                        }
+                                    ],
+                                    "style": {
+                                        "level": 3
+                                    }
+                                },
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Write here text"
+                                        }
+                                    ],
+                                    "style": {
+                                        "level": 4
+                                    }
+                                },
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Write here text "
+                                        }
+                                    ],
+                                    "style": {
+                                        "level": 5
+                                    }
+                                }
+                            ]
+                        },
+                        "edit": {
+                            "htmlbox": true
+                        }
+                    }
+                },
+                {
+                    "type": "SHAPE",
+                    "shape": {
+                        "nvOProps": {
+                            "nvDProps": {
+                                "id": "a95687ce-86f4-4f32-8632-448245b3275a",
+                                "name": "Номер слайда 21"
+                            },
+                            "nvODProps": {
+                                "locks": {
+                                    "noGroup": true
+                                }
+                            },
+                            "nvProps": {
+                                "placeHolder": {
+                                    "type": "SLIDENUM"
+                                }
+                            }
+                        },
+                        "props": {
+                            "transform": {
+                                "rotate": 0,
+                                "dim": {
+                                    "width": 40.451576,
+                                    "height": 17.88693
+                                },
+                                "pos": {
+                                    "left": 53.67614,
+                                    "top": 479.93875,
+                                    "zindex": 3
+                                }
+                            },
+                            "fill": {
+                                "type": "NONE"
+                            },
+                            "geom": {
+                                "type": "PRESET",
+                                "preset": {
+                                    "type": "RECT"
+                                }
+                            }
+                        },
+                        "textBody": {
+                            "props": {
+                                "valign": "MIDDLE",
+                                "inset": {
+                                    "left": 0,
+                                    "top": 0,
+                                    "right": 0,
+                                    "bottom": 0
+                                },
+                                "writingMode": "HORIZONTAL"
+                            },
+                            "listStyles": [
+                                {
+                                    "halign": "CENTER",
+                                    "level": 1,
+                                    "defPrProps": {
+                                        "font": {
+                                            "ref": "MINOR"
+                                        },
+                                        "fill": {
+                                            "type": "SOLID",
+                                            "solid": {
+                                                "color": {
+                                                    "type": "BG1",
+                                                    "tweaks": {
+                                                        "hsl": {
+                                                            "luminance": [
+                                                                {
+                                                                    "mode": "MODIFY",
+                                                                    "value": 0.65
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "size": 8.03,
+                                        "fontweight": "NORMAL",
+                                        "chk": {
+                                            "state": "PROCESSED"
+                                        }
+                                    }
+                                }
+                            ],
+                            "paras": [
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "1",
+                                            "type": "FIELD",
+                                            "field": {
+                                                "type": "SLIDENUM",
+                                                "slidenum": "NUM1"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "edit": {
+                            "htmlbox": true
+                        }
+                    }
+                },
+                {
+                    "type": "SHAPE",
+                    "shape": {
+                        "nvOProps": {
+                            "nvDProps": {
+                                "id": "991ed34e-9e7d-4b01-aa0f-8ecaa4673f35",
+                                "name": "Footer Placeholder 1",
+                                "hidden": false
+                            },
+                            "nvODProps": {
+                                "locks": {
+                                    "noGroup": true
+                                }
+                            },
+                            "nvProps": {
+                                "placeHolder": {
+                                    "type": "FOOTER"
+                                }
+                            }
+                        },
+                        "props": {
+                            "transform": {
+                                "rotate": 0,
+                                "dim": {
+                                    "width": 544,
+                                    "height": 30
+                                },
+                                "pos": {
+                                    "left": 262,
+                                    "top": 492,
+                                    "zindex": 4
+                                }
+                            },
+                            "geom": {
+                                "type": "PRESET",
+                                "preset": {
+                                    "type": "RECT"
+                                }
+                            }
+                        },
+                        "textBody": {
+                            "props": {
+                                "valign": "MIDDLE",
+                                "inset": {
+                                    "left": 9.6,
+                                    "top": 4.8,
+                                    "right": 9.6,
+                                    "bottom": 4.8
+                                }
+                            },
+                            "listStyles": [
+                                {
+                                    "halign": "CENTER",
+                                    "level": 1,
+                                    "defPrProps": {
+                                        "font": {
+                                            "ref": "MINOR"
+                                        },
+                                        "fill": {
+                                            "type": "SOLID",
+                                            "solid": {
+                                                "color": {
+                                                    "type": "BG1",
+                                                    "tweaks": {
+                                                        "hsl": {
+                                                            "luminance": [
+                                                                {
+                                                                    "mode": "MODIFY",
+                                                                    "value": 0.5
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "size": 6,
+                                        "italic": false,
+                                        "fontweight": "NORMAL"
+                                    }
+                                }
+                            ],
+                            "paras": [
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "Footer Message"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "edit": {
+                            "htmlbox": true
+                        }
+                    }
+                },
+                {
+                    "type": "SHAPE",
+                    "shape": {
+                        "nvOProps": {
+                            "nvDProps": {
+                                "id": "18d3ead5-bbb1-45bb-b2da-dfc511c4d497",
+                                "name": "Date Placeholder 1",
+                                "hidden": false
+                            },
+                            "nvODProps": {
+                                "locks": {
+                                    "noGroup": true
+                                }
+                            },
+                            "nvProps": {
+                                "placeHolder": {
+                                    "type": "DATETIME"
+                                }
+                            }
+                        },
+                        "props": {
+                            "transform": {
+                                "rotate": 0,
+                                "dim": {
+                                    "width": 172.13338,
+                                    "height": 30
+                                },
+                                "pos": {
+                                    "left": 80,
+                                    "top": 492.91687,
+                                    "zindex": 5
+                                }
+                            },
+                            "geom": {
+                                "type": "PRESET",
+                                "preset": {
+                                    "type": "RECT"
+                                }
+                            }
+                        },
+                        "textBody": {
+                            "props": {
+                                "valign": "MIDDLE",
+                                "inset": {
+                                    "left": 9.6,
+                                    "top": 4.8,
+                                    "right": 9.6,
+                                    "bottom": 4.8
+                                }
+                            },
+                            "listStyles": [
+                                {
+                                    "halign": "LEFT",
+                                    "level": 1,
+                                    "defPrProps": {
+                                        "font": {
+                                            "ref": "MINOR"
+                                        },
+                                        "fill": {
+                                            "type": "SOLID",
+                                            "solid": {
+                                                "color": {
+                                                    "type": "BG1",
+                                                    "tweaks": {
+                                                        "hsl": {
+                                                            "luminance": [
+                                                                {
+                                                                    "mode": "MODIFY",
+                                                                    "value": 0.5
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "size": 6,
+                                        "italic": false,
+                                        "fontweight": "NORMAL"
+                                    }
+                                }
+                            ],
+                            "paras": [
+                                {
+                                    "portions": [
+                                        {
+                                            "t": "February 20, 2020",
+                                            "type": "FIELD",
+                                            "field": {
+                                                "type": "DATETIME",
+                                                "datetime": "FORMAT4"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "edit": {
+                            "htmlbox": true
+                        }
+                    }
+                }
+            ],
+            "bg": {
+                "bgRef": {
+                    "ref": "THEMEINDEX",
+                    "color": {
+                        "type": "BG1"
+                    },
+                    "index": 0
+                }
+            },
+            "hf": {
+                "footer": true,
+                "header": false,
+                "slidenum": true,
+                "datetime": true
+            }
+        },
+        "textStyle": {
+            "titleStyles": [
+                {
+                    "halign": "LEFT",
+                    "level": 1,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "NONE"
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 1
+                        },
+                        "before": {
+                            "type": "PERCENT",
+                            "percent": 0
+                        }
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "fontFamily": {
+                                "name": "Montserrat"
+                            }
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 36,
+                        "baseline": 0,
+                        "cap": "ALLCAPS",
+                        "space": 0,
+                        "fontweight": "LIGHT",
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                }
+            ],
+            "txtbodyStyles": [
+                {
+                    "halign": "LEFT",
+                    "level": 1,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "NONE"
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 1
+                        },
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 13.333333
+                        }
+                    },
+                    "margin": {
+                        "left": 0
+                    },
+                    "indent": 0,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 28,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 2,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "NONE"
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 1
+                        },
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 6.653333
+                        }
+                    },
+                    "margin": {
+                        "left": 0
+                    },
+                    "indent": 0,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 3,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "NONE"
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 1
+                        },
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 6.653333
+                        }
+                    },
+                    "margin": {
+                        "left": 0
+                    },
+                    "indent": 0,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 12,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 4,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "NONE"
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 1
+                        },
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 6.653333
+                        }
+                    },
+                    "margin": {
+                        "left": 0
+                    },
+                    "indent": 0,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1",
+                                    "tweaks": {
+                                        "alpha": 0.3
+                                    }
+                                }
+                            }
+                        },
+                        "size": 10,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 5,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "NONE"
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 1
+                        },
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 6.653333
+                        }
+                    },
+                    "margin": {
+                        "left": 0
+                    },
+                    "indent": 0,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1",
+                                    "tweaks": {
+                                        "alpha": 0.5
+                                    }
+                                }
+                            }
+                        },
+                        "size": 10,
+                        "baseline": 0,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 6,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "8226"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 0.9
+                        },
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 6.653333
+                        }
+                    },
+                    "margin": {
+                        "left": 263.97626
+                    },
+                    "indent": -23.9979,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 7,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "8226"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 0.9
+                        },
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 6.653333
+                        }
+                    },
+                    "margin": {
+                        "left": 311.97208
+                    },
+                    "indent": -23.9979,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 8,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "8226"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 0.9
+                        },
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 6.653333
+                        }
+                    },
+                    "margin": {
+                        "left": 359.96765
+                    },
+                    "indent": -23.9979,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 9,
+                    "listStyle": {
+                        "bullet": {
+                            "type": "CHARACTER",
+                            "character": {
+                                "ch": "8226"
+                            }
+                        },
+                        "font": {
+                            "fontFamily": {
+                                "name": "Arial"
+                            }
+                        }
+                    },
+                    "spacing": {
+                        "line": {
+                            "type": "PERCENT",
+                            "percent": 0.9
+                        },
+                        "before": {
+                            "type": "ABSOLUTE",
+                            "absolute": 6.653333
+                        }
+                    },
+                    "margin": {
+                        "left": 407.96326
+                    },
+                    "indent": -23.9979,
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                }
+            ],
+            "otherStyles": [
+                {
+                    "halign": "LEFT",
+                    "level": 1,
+                    "margin": {
+                        "left": 0
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 2,
+                    "margin": {
+                        "left": 47.995693
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 3,
+                    "margin": {
+                        "left": 95.99139
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 4,
+                    "margin": {
+                        "left": 143.9872
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 5,
+                    "margin": {
+                        "left": 191.98277
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 6,
+                    "margin": {
+                        "left": 239.97836
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 7,
+                    "margin": {
+                        "left": 287.97406
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 8,
+                    "margin": {
+                        "left": 335.96976
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                },
+                {
+                    "halign": "LEFT",
+                    "level": 9,
+                    "margin": {
+                        "left": 383.96545
+                    },
+                    "dir": "LTR",
+                    "defPrProps": {
+                        "font": {
+                            "ref": "MINOR"
+                        },
+                        "fill": {
+                            "type": "SOLID",
+                            "solid": {
+                                "color": {
+                                    "type": "TX1"
+                                }
+                            }
+                        },
+                        "size": 18,
+                        "chk": {
+                            "state": "PROCESSED"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+]

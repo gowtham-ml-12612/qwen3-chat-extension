@@ -81,8 +81,13 @@ export const CONTEXT_SIZES: ContextSizeOption[] = [
   },
   {
     tokens: 32768,
-    label: "32K · Maximum",
+    label: "32K · Deep",
     hint: "~4× memory — may fail to load on low-RAM devices (falls back automatically)",
+  },
+  {
+    tokens: 65536,
+    label: "64K · Maximum",
+    hint: "~8× memory — requires 8GB+ RAM, falls back automatically on failure",
   },
 ];
 

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Show Pilot</title>
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body>
+  <div class="panel">
+    <header>
+      <div class="header-top">
+        <div class="brand">
+          <img class="brand-logo" src="logo.png" alt="Show Pilot" width="40" height="40" />
+          <span class="brand-name">Show Pilot</span>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" id="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+          <button class="icon-btn" id="new-chat-btn" title="New chat" aria-label="New chat" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </button>
+          <button class="icon-btn" id="more-btn" title="More options" aria-label="More options">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="context-selector">
+        <button class="ctx-dropdown-btn" id="ctx-dropdown-btn" title="Context window size">
+          <span class="ctx-dropdown-label" id="ctx-dropdown-label">Focus · 16K</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="ctx-dropdown-menu" id="ctx-dropdown-menu" hidden>
+          <button class="ctx-option" data-mode="flash" data-tokens="8192">
+            <span class="ctx-option-name">Flash</span>
+            <span class="ctx-option-size">8K</span>
+          </button>
+          <button class="ctx-option" data-mode="focus" data-tokens="16384">
+            <span class="ctx-option-name">Focus</span>
+            <span class="ctx-option-size">16K</span>
+          </button>
+          <button class="ctx-option" data-mode="forge" data-tokens="32768">
+            <span class="ctx-option-name">Forge</span>
+            <span class="ctx-option-size">32K</span>
+          </button>
+          <button class="ctx-option" data-mode="max" data-tokens="65536">
+            <span class="ctx-option-name">Max</span>
+            <span class="ctx-option-size">64K</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="fallback-banner" id="fallback-banner" hidden>
+      <span class="fallback-text" id="fallback-text"></span>
+      <button class="fallback-ok" id="fallback-ok">OK</button>
+    </div>
+
+    <main id="messages">
+      <div id="welcome">
+        <div class="welcome-content">
+          <img class="welcome-logo" src="logo.png" alt="Show Pilot" width="72" height="72" />
+          <h2>How can I help you today?</h2>
+          <p>Ask about your slides, get analysis, or chat about your presentation.</p>
+        </div>
+      </div>
+    </main>
+
+    <div class="loading-overlay" id="loading-overlay" hidden>
+      <div class="loading-content">
+        <img class="loading-logo" src="logo.png" alt="Show Pilot" width="80" height="80" />
+        <div class="loading-phrase" id="loading-phrase">Warming up the engine…</div>
+        <div class="loading-progress-wrap">
+          <div class="loading-progress-bar">
+            <div class="loading-progress-fill" id="loading-progress-fill"></div>
+          </div>
+          <span class="loading-pct" id="loading-pct">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="input-box" id="input-box">
+        <div class="image-preview" id="image-preview" hidden>
+          <img id="image-preview-img" alt="Attached image" />
+          <button class="image-preview-remove" id="image-preview-remove" title="Remove image" aria-label="Remove image">&times;</button>
+        </div>
+        <textarea id="input" rows="1" placeholder="How can I help you today?" disabled></textarea>
+        <input type="file" id="file-input" accept="image/*" hidden />
+        <div class="input-toolbar">
+          <div class="input-toolbar-left">
+            <button class="mode-dropdown-btn" id="mode-dropdown-btn" title="Interaction mode">
+              <svg class="mode-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
+                <circle cx="12" cy="12" r="4"/>
+              </svg>
+              <span id="mode-dropdown-label">Ask before acting</span>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+            <div class="mode-dropdown-menu" id="mode-dropdown-menu" hidden>
+              <button class="mode-option active" data-interaction="ask">
+                <span class="mode-option-label">Ask before acting</span>
+              </button>
+              <button class="mode-option" data-interaction="autopilot">
+                <span class="mode-option-label">Autopilot</span>
+              </button>
+            </div>
+          </div>
+          <div class="input-toolbar-right">
+            <div class="ctx-ring-wrap" id="ctx-ring-wrap" hidden>
+              <svg class="ctx-ring" viewBox="0 0 36 36">
+                <circle class="ctx-ring-bg" cx="18" cy="18" r="15.5" />
+                <circle class="ctx-ring-fg" id="ctx-ring-fg" cx="18" cy="18" r="15.5" />
+              </svg>
+              <div class="ctx-ring-tooltip" id="ctx-ring-tooltip" hidden>
+                <span id="ctx-ring-detail"></span>
+              </div>
+            </div>
+            <button class="toolbar-icon-btn" id="attach-btn" title="Attach image" aria-label="Attach image" disabled>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+              </svg>
+            </button>
+            <button class="send-btn" id="send-btn" title="Send message" aria-label="Send message" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+              </svg>
+            </button>
+            <button class="stop-btn" id="stop-btn" title="Stop generating" aria-label="Stop generating" hidden>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="6" width="12" height="12" rx="2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="disclaimer">
+        Show Pilot is AI and can make mistakes. Please double-check responses.
+      </div>
+    </footer>
+  </div>
+
+  <div class="drop-overlay" id="drop-overlay" hidden>
+    <div class="drop-overlay-content">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+      </svg>
+      <span>Drop image here</span>
+    </div>
+  </div>
+
+  <script src="sidepanel/index.ts" type="module"></script>
+</body>
+</html>

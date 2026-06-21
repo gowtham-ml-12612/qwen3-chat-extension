@@ -12,7 +12,7 @@
 // When write-tools land, the very same dial governs how many correction rounds
 // Forge runs — no restructuring required.
 
-export type EffortMode = "flash" | "focus" | "forge";
+export type EffortMode = "flash" | "focus" | "forge" | "max";
 
 export interface ModeConfig {
   /** Stable id; also the value persisted to storage. */
@@ -57,21 +57,27 @@ export const MODES: Record<EffortMode, ModeConfig> = {
   forge: {
     id: "forge",
     label: "Forge",
-    hint: "Deepest — reasons and verifies until it matches your prompt",
+    hint: "Deepest — reasons carefully before answering",
     thinking: true,
-    maxIterations: 5,
-    // Depth here comes from reasoning + the verify loop, not raw pixels: a
-    // bigger image makes the wasm vision encoder OOM/abort. Kept within the
-    // same memory-safe envelope as Focus (see models.ts imageMaxTokens).
+    maxIterations: 1,
     imageMaxDim: 1600,
     maxTokens: 1536,
+  },
+  max: {
+    id: "max",
+    label: "Max",
+    hint: "Maximum context — 64K tokens for the longest conversations",
+    thinking: true,
+    maxIterations: 1,
+    imageMaxDim: 1600,
+    maxTokens: 2048,
   },
 };
 
 export const DEFAULT_MODE: EffortMode = "focus";
 
-export const EFFORT_MODES: EffortMode[] = ["flash", "focus", "forge"];
+export const EFFORT_MODES: EffortMode[] = ["flash", "focus", "forge", "max"];
 
 export function isEffortMode(value: unknown): value is EffortMode {
-  return value === "flash" || value === "focus" || value === "forge";
+  return value === "flash" || value === "focus" || value === "forge" || value === "max";
 }

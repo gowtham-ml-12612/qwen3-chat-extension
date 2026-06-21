@@ -1,6 +1,6 @@
 {
-  "name": "qwen3-chat-extension",
-  "version": "0.0.1",
+  "name": "show-pilot",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
